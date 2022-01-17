@@ -1,0 +1,32 @@
+<!-- Button trigger modal -->
+<button id="notifyModalButton" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#notifyModal">  
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="notifyModal" tabindex="-1" aria-labelledby="notifyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header custom_bg_light_teal">
+        <h5 class="modal-title" id="notifyModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="close_notify_modal()"></button>
+      </div>
+      <div class="modal-body">
+       
+       <div class="w-100 p-3 d-none" id="too_young">
+        {{too_young.message_content}}         
+       </div>
+
+       <div class="w-100 p-3 d-none" id="volunteer_email">
+        <p> The email you entered is already in our system with a completed application.  Please check your email spam folders for emails from eBookBuddy.  The email will contain information on the next steps.</p>
+
+        <p>If you did not complete an application, please email the following:</p>
+        <text> <a href="mailto: info@ebookbuddy.org">Email: info@ebookbuddy.org</a></text>
+       </div>
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="close_notify_modal()">Close</button>    
+      </div>
+    </div>
+  </div>
+</div>

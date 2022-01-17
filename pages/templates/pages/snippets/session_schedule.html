@@ -1,0 +1,65 @@
+{% load landing_extras %}
+<div class="card mx-auto">
+	<div class="card-header custom_bg_light_purple m-0 p-0">
+		<h4 class="m-0 p-0 text-center"> Schedule</h4>
+	</div>
+	<div class="card-body">
+		{% if scheduled_slots.count > 0 %}
+		<div class="row row-cols-7 gx-0 w-100">
+			{% for day in days %}
+			<div class="col border{% if day.name == today_name %} custom_bg_pale_green {% else %} custom_bg_pale_purple {% endif %}">
+
+				<div class="border-bottom fw-bold text-center font_14">
+					<div>
+						{{day.name}}
+					</div>
+					<div>
+						{{day.span_name}}
+					</div>
+					
+				</div>
+				<div class="text-center">
+					{% for slot in semester_slots %}
+					{% if slot.day == day %}
+					{% if slot in scheduled_slots.all %}
+					<div class="py-2 border-bottom">
+						<div>
+							{{slot.get_times}}
+						</div>
+						{% if logged_in_user|user_role == "Reader" %}
+						<div>
+							{% for match in scheduled_matches %}
+							{% if slot in match.day_times.session_day_times.all %}
+							<text class="fw-bold">{{match.student}}</text>
+							{% endif %}
+							{% endfor %}
+						</div>
+						{% endif %}
+					</div>
+					{% endif %}
+					{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+			
+			{% endfor %}
+		{% else %}
+		<div class="row">
+			<div class="col">
+				<h5 class="m-0 p-0 text-center">Currently you have no scheduled sessions.</h5>
+			</div>			
+		</div>
+
+		{% endif %}
+		</div>
+			<div class="row border">
+
+				<div class="col">
+					<div class="text-center p-3">
+						<a class="btn custom_bg_pale_green" href="{% url 'reading_sessions:initial_entry' %}">Join Session </a>
+					</div>								
+				</div> 
+					
+			</div>
+	</div>
+</div>

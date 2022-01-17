@@ -1,0 +1,151 @@
+
+
+<div class="modal fade " id="create_redirect_Modal" tabindex="-1" aria-labelledby="createRedirectModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-fullscreen p-5 ">
+    <div class="modal-content ">
+      <div class="modal-header custom_bg_light_teal p-2 text-center modal_header_fixed_height">
+        <div class="d-inline-flex w-100">
+          <div class="d-flex justify-content-left flex-grow-1 align-items-center">
+            <h5 class="modal-title" id="createRedirectModalLabel">Manually Redirect Users </h5>
+          </div>
+
+          <div class="d-flex justify-content-center align-items-center">
+            <h6 class="m-0 pe-3">Current Location - {{room}}</h6>
+          </div>
+          <div class="d-flex justify-content-left align-items-center">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="close_create_redirect()"></button>
+          </div>
+          
+        </div>
+        
+        
+      </div>
+      <div class="modal-body max_height_modal">
+<!--         <div class="px-2 room_name_height">
+          <div class="d-inline-flex w-100">
+            <div>
+              <label class="new_room_label text-center w-100">To Create a New Room, Enter the Name.</label>
+            </div>
+            <div class="ps-3 fixed_width_new_room">
+              <input type="text" name="room_to_create" class="fixed_width_new_room" id="new_room_name" onclick="clear_error()">
+            </div>           
+          </div>          
+        </div> -->
+
+        <div class="users_manual_div">
+        	<div class="row px-3 header_row_manual">
+              <div class="col d-flex justify-content-center align-items-center">
+                <h5 class="text-center ">Students</h5>
+              </div>
+              <div class="col d-flex justify-content-center align-items-center">
+                <h5 class="text-center ">Readers</h5>
+              </div>
+              <div class="col d-flex justify-content-center align-items-center">
+                <h5 class="text-center ">Staff/Others</h5>
+              </div>
+              <div class="col d-flex justify-content-center align-items-center flex-column">
+                <h5 class="text-center  mb-0">Existing Rooms </h5>
+                <div class="clear_existing_div text-center" onclick="clear_existing_room()">Clear Choices</div>
+              </div>
+              
+            </div>
+      	<div class="row mx-3 row_max_height border">
+      		<div class="col col_max_height">
+      			
+      			<div class="d-flex justify-content-center gx-0 flex-column" id="students_logged_in">
+
+              {% for manual_user in all_students %}
+      				<div class="user_logged_in border d-inline-flex align-items-center w-100 ps-2" id="manual_redirect_user-{{manual_user.id}}">
+                
+      					<input type="checkbox" name="user_in" class="user_in_check" onclick="clear_redirect_error()" value="{{manual_user.id}}">
+                <label class="user_in_label fw-bold">{{manual_user}}: <span id="manual_user_location_{{manual_user.id}}" class="fw-normal">
+                  {% if manual_user.session_status.room %}
+                    {{manual_user.session_status.room}}
+                  {% else %}
+                    Offline
+                  {% endif %}
+
+              </span></label>
+                
+      				</div>
+              {% endfor %}
+      				
+      			</div>
+      			
+      		</div>
+      		<div class="col col_max_height">
+      			
+      			<div class="d-flex justify-content-center gx-0 flex-column" id="vols_logged_in">
+              {% for manual_user in all_readers %}
+      				<div class="user_logged_in border d-inline-flex align-items-center w-100 ps-2" id="manual_redirect_user-{{manual_user.id}}">
+      					<input type="checkbox" name="user_in" class="user_in_check" onclick="clear_redirect_error()" value="{{manual_user.id}}">
+      					<label class="user_in_label fw-bold">{{manual_user}}: <span id="manual_user_location_{{manual_user.id}}" class="fw-normal">
+                  {% if manual_user.session_status.room %}
+                    {{manual_user.session_status.room}}
+                  {% else %}
+                    Offline
+                  {% endif %}
+
+              </span></label>
+      				</div>
+              {% endfor %}
+      				
+      			</div>
+      		</div>
+      		<div class="col col_max_height">
+      			
+      			<div class="d-flex justify-content-center gx-0 flex-column" id="staff_logged_in">
+              {% for manual_user in all_rest %}
+      				<div class="user_logged_in border d-inline-flex align-items-center w-100 ps-2" id="manual_redirect_user-{{manual_user.id}}">
+      					<input type="checkbox" name="user_in" class="user_in_check" onclick="clear_redirect_error()" value="{{manual_user.id}}">
+      					<label class="user_in_label fw-bold">{{manual_user}}: <span id="manual_user_location_{{manual_user.id}}" class="fw-normal">
+                  {% if manual_user.session_status.room %}
+                    {{manual_user.session_status.room}}
+                  {% else %}
+                    Offline
+                  {% endif %}
+
+              </span></label>
+      				</div>
+              {% endfor %}
+      				
+      			</div>
+      		</div>
+          <div class="col col_max_height">
+            
+            
+            <div class="d-flex justify-content-center gx-0 flex-column" id="all_rooms">
+              {% for room in all_rooms %}
+              <div class="border d-inline-flex px-1 py-1 w-100">
+                
+                  <div class="d-flex justify-content-center align-items-center">
+                    <input type="radio" name="manual_room" class="room_radio_manual" value = {{room.id}} onclick="clear_redirect_error()">
+                  </div>
+                  <div class="w-100 ">
+                      <label class="room_row_label ps-3 fw-bold">{{room}}:</label>
+                      <text class="w-100 ps-3 count_row_label">count: <span id="manual_room_count-{{room.id}}">{{room.participants.ws_count}} </span></text>
+                      <!-- WS({{room.participants.ws_count}}) - J({{room.participants.jitsi_count}}) -->
+            
+                  </div>      
+              </div>
+              {% endfor %}
+              
+            </div>
+          </div>
+
+      		
+      	</div>
+</div>
+      </div>
+      <div class="modal-footer">
+        <div class="alert alert-danger p-1 w-100 text-center d-none" id="create_redirect_error">
+            <strong id="create_redirect_error_text"></strong>
+        </div>
+      
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close_manual_redirect" onclick="close_create_redirect()" >Close</button>
+        <button type="button" class="btn btn-primary" onclick="create_and_send()">Create and Redirect</button>
+      </div>
+    </div>
+  </div>
+</div>
+

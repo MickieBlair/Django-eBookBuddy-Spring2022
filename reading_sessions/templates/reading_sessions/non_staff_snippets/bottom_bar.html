@@ -1,0 +1,169 @@
+<div class="bottom_bar_non_staff">
+	{% if room.name != "Testing Room" %}
+
+	<button type="button" class="btn {% if private_chat.total_unread_private == 0 %}btn_custom_messages{% else %}btn_custom_messages_notification{% endif %}  btn-sm button_bottom_toolbar" data-bs-toggle="modal" data-bs-target="#messagesModal" id="private_messages_button">
+	  Messages<span class="red_font">(<span class="new_private_messages-{{logged_in_user.id}}" id="new_private_messages-{{logged_in_user.id}}">{{private_chat.total_unread_private}}</span>)</span>
+	</button>
+
+	{% include 'reading_sessions/non_staff_snippets/non_staff_private_messages_modal.html' %}
+	{% else %}
+	<div>
+		
+	</div>
+	{% endif %}
+
+	{% if main_role == "Reader" %}
+	<button type="button" class="btn btn-sm custom_bg_dark_teal button_bottom_toolbar" data-bs-toggle="modal" data-bs-target="#ns_student_profile_Modal">
+  Student Info
+</button>
+
+<div class="modal fade" id="ns_student_profile_Modal" tabindex="-1" aria-labelledby="ns_student_profile_ModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content modal-dialog-scrollable">
+      <div class="modal-header custom_bg_light_teal p-2  text-center">
+        <h4 class="modal-title w-100" id="ns_student_profile_ModalLabel">Student Profiles</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% for profile in student_profiles %}
+          <div class="card m-2 volunteer_display_student_profile" id="student_member_profile-{{profile.user.id}}">
+            <div class="card-header m-0 p-0">
+              <h5 class="m-0 py-0 px-2">{{profile.user.username}} - {{profile.user.full_name}}</h5>
+            </div>
+            <div class="card-body">
+              <div class="p-2 d-flex">
+                <label class="fixed_width_bold_label250">Initial Assessment Performed:</label> 
+                <text class="ps-2">
+                  
+                  {% if profile.user.student_progress.initial_assessment %}
+                  Yes
+                  {% else %}
+                  No
+                  {% endif %}
+                  </text>
+              </div>
+              <div class="p-2 d-flex">
+                <label class="fixed_width_bold_label250">Initial Reading Level:</label> 
+                <text class="ps-2">
+                  {{profile.user.student_progress.starting}}
+                  </text>
+              </div>
+              <div class="p-2 d-flex">
+                <label class="fixed_width_bold_label250">Current Reading Level:</label> 
+                <text class="ps-2">
+                  {{profile.user.student_progress.current}}
+                </text>
+              </div>
+
+              <div class="p-2 d-flex">
+                <label class="fixed_width_bold_label250">Last Updated:</label> 
+                <text class="ps-2">
+                  {{profile.user.student_progress.last_assessed}}
+                </text>
+              </div>
+
+              <div class="p-2 d-flex">
+                <label class="fixed_width_bold_label250">Grade:</label> 
+                <text class="ps-2">
+                  {{profile.grade}}
+                  </text>
+              </div>
+            </div>
+          </div>
+        {% endfor %}      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="close_help" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+	{% endif %}
+
+	{% if room.name != "Testing Room" %}
+
+	<button type="button" class="btn btn-warning button_bottom_toolbar btn-sm " data-bs-toggle="modal" data-bs-target="#helpModal">
+	  Help
+	</button>
+
+
+	<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header custom_bg_light_teal p-2  text-center">
+	        <h4 class="modal-title w-100" id="helpModalLabel">Send Help Request to Staff</h4>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <input id="from_user" type="hidden" value = "{{logged_in_user.id}}">
+	        <input id="from_room" type="hidden" value = "{{room.id}}">
+	        <h5 class="pb-3">Let us know what you need, so we can send the right person to help you!</h5>
+	        <textarea class="form-control" id="help_message_content" name="help_request" rows=5></textarea> 
+
+	      
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" id="close_send_help_request" data-bs-dismiss="modal">Close</button>
+
+	        <button type="button" class="btn btn-info" id="send_help" onclick="ask_for_help()">Send Request</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	{% else %}
+	<div></div>
+	{% endif %}
+
+	<button class="btn btn-danger button_bottom_toolbar btn-sm black_font" onclick='location.href="{% url 'reading_sessions:session_end' %}";' type="button">
+         End Session</button>
+
+
+	<button class="btn btn-dark btn-sm close_full_screen" onclick="close_full_screen()" id="close_full_screen">
+		<div class="d-inline-flex justify-content-center align-items-center">
+			<i class="fas fas fa-compress-arrows-alt icon25px"></i>
+			<div class="ps-2 d-flex justify-content-center align-items-center">
+				Exit Full Screen
+			</div>
+		</div>
+	</button>
+	
+
+	<button class="btn btn-dark btn-sm open_full_screen h-100" onclick="open_full_screen()" id="open_full_screen">
+			<div class="d-inline-flex justify-content-center align-items-center  h-100">
+				<i class="fas fa-expand-arrows-alt icon25px"></i>
+				<div class="ps-2 d-flex justify-content-center align-items-center">
+					Full Screen
+				</div>
+		</div>
+	</button>
+
+
+	<button type="button" class="btn btn-warning d-none" data-bs-toggle="modal" data-bs-target="#replyHelpModal" id="reply_help_modal">
+	  Help Replay
+	</button>
+
+	<div class="modal fade" id="replyHelpModal" tabindex="-1" aria-labelledby="helpReplyModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header custom_bg_light_teal p-2  text-center">
+	        <h4 class="modal-title w-100" id="helpReplyModalLabel">Reply From Staff</h4>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <div class="p-3" id="help_request_body_reply">
+	        	
+	        </div>	      
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" id="close_reply_help_request" data-bs-dismiss="modal">Close</button>
+
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+
+	
+</div>
+

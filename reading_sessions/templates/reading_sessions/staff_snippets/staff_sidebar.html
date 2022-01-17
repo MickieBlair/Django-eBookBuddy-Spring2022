@@ -1,0 +1,69 @@
+<!-- <div class="sidebar_btn text-center" onclick="open_monitoring(this)" id="open_monitoring">
+	OPEN
+</div> -->
+
+<button class="sidebar_btn text-center p-1" id="todays_session_btn" onclick="determine_div_to_display(this)">
+		<h6 class="link_text ">Today's</h6>
+		<h6 class="link_text">Sessions</h6>
+		<h6 class="blue_link_text">Total: {{day_with_session.day_sessions.all.count}}</h6>
+</button>
+
+<button class="sidebar_btn text-center p-1"id="rooms_participants_btn" onclick="determine_div_to_display(this)">
+	<h6 class="link_text">Rooms</h6>
+    <h6 class="blue_link_text">Users: <span id="total_users">0</span></h6>
+</button>
+
+<button class="{% if match_redirects.count == 0 %}sidebar_btn{% else %}sidebar_link_notification{% endif %} text-center p-1" id="redirect_modal_button" data-bs-toggle="modal" data-bs-target="#redirect_notifications_Modal">
+  <h6 class="link_text">Redirects</h6>
+  <h6 class="red_link_text">(<span id="number_pending_redirects">{{match_redirects.count}}</span>)</h6>  
+</button>
+
+{% include 'reading_sessions/staff_snippets/redirect_modal.html' %}
+
+
+  <button class="{% if all_helps.count == 0 %}sidebar_btn{% else %}sidebar_link_notification{% endif %} text-center p-1" data-bs-toggle="modal" data-bs-target="#help_requests_Modal" id="view_help_request_button">
+    <h6 class="link_text">Help</h6>
+    <h6 class="link_text">Requests</h6>
+    <h6 class="red_link_text">(<span id="request_count">{{all_helps.count}}</span>)</h6> 
+  </button>
+{% include 'reading_sessions/staff_snippets/help_request_modal.html' %}
+
+<button class="sidebar_btn text-center p-1" data-bs-toggle="modal" data-bs-target="#sendMessageModal" id="notify_users_button">
+    <h6 class="link_text">Notify</h6>
+    <h6 class="link_text">Users</h6>  
+</button>
+{% include 'reading_sessions/staff_snippets/notify_users_modal.html' %}
+
+
+<button class="sidebar_btn text-center p-1" id="staff_chat_btn" onclick="determine_div_to_display(this)">
+  <h6 class="link_text">Staff Chat</h6>
+  <h6 class="red_link_text">(<span id="new_staff_chat_messages">0</span>)</h6> 
+</button>
+
+<button class="{% if private_chat.total_unread_private == 0 %}sidebar_btn{% else %}sidebar_link_notification{% endif %} text-center p-1" data-bs-toggle="modal" data-bs-target="#private_messages_modal" id="private_messages_button">
+    <h6 class="link_text">Messages</h6>
+        <h6 class="red_link_text">(<span class="new_private_messages-{{logged_in_user.id}}" id="new_private_messages-{{logged_in_user.id}}">{{private_chat.total_unread_private}}</span>)</h6> 
+</button>
+{% include 'reading_sessions/staff_snippets/private_messages_modal.html' %}
+
+<button class="sidebar_btn text-center p-1" id="assessments_button" data-bs-toggle="modal" data-bs-target="#assessments_Modal">
+      <h6 class="link_text">Student Progress</h6>
+        <h6 class="red_link_text">(<span id="students_without">{{without_assessment}}</span>)</h6>  
+</button>
+{% include 'reading_sessions/staff_snippets/assessments_modal.html' %}
+
+<button class="sidebar_btn text-center p-1" id="sub_requests_button" data-bs-toggle="modal" data-bs-target="#sub_requests_Modal">
+      <h6 class="link_text">Sub Request</h6>
+      <h6 class="blue_link_text">Today: <span id="today_subs">0</span></h6> 
+</button>
+{% include 'reading_sessions/staff_snippets/sub_requests_modal.html' %}
+
+<button class="sidebar_btn text-center p-1" data-bs-toggle="modal" data-bs-target="#create_redirect_Modal" id="manual_redirect_btn">
+    <h6 class="link_text">Manual</h6>
+    <h6 class="link_text">Redirect</h6>  
+</button>
+{% include 'reading_sessions/staff_snippets/manual_redirect_modal.html' %}
+
+{% include 'reading_sessions/staff_snippets/websocket_error_modal.html' %}
+
+{% include 'reading_sessions/staff_snippets/staff_chat_client_error_modal.html' %}

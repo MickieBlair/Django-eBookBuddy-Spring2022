@@ -1,0 +1,32 @@
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body{
+	min-height:100vh;
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: space-between;
+	background-color: #f9fafb0f;
+}
+
+.main_content{
+	margin-top: 56px;
+	flex: 1 1 auto;
+	padding: 0 0 0;	
+	background-color: red;
+}
+
+.staff_room_div{
+	background-color: purple;
+	height: 30px;
+}
+
+.staff_meeting_div{
+	background-color: yellow;
+	height: calc(100% - 86px);
+}
+
+

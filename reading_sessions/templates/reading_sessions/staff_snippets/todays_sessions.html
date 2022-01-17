@@ -1,0 +1,57 @@
+
+
+{% if day_with_session.count == 0 %}
+<div class="p-3 text-center">
+	<div class="border p-3 bg-light" id = "no_sessions_today">
+		<h5 class="m-0 p-2">{{today_day_of_week}} - {{todays_date}}</h5>
+		<h5 class="m-0 p-2">No Sessions Today</h5>
+	</div>
+</div>
+ 
+{% else %}
+
+
+
+
+<div class="all_sessions_div" id = "all_sessions_div">
+	<h5 class='border-bottom mb-0'>{{day_with_session.day}}, {{day_with_session.date}}</h5>
+	<div class="table-responsive pt-0" >
+		<table class="table table-striped table-sm align-middle">
+		 <thead>
+		     <tr>
+		      <th class="ps-1">Session</th>
+		      <th class="text-center">Match Count</th>
+		      <th class="fixed_width_status text-center">Matches</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		 	{% for session in day_with_session.day_sessions.all %}
+		     <tr>
+		       <td class="ps-1">
+		       	<text class="fw-bold"> {{session.day_time.session_slot}}: </text>
+		       	<text class=""> {{session.day_time.time_start}}-{{session.day_time.time_end}}</text>
+		       </td>
+		      <td class="text-center">{{session.active_scheduled_matches_in_session.count}}</td>
+		      <td class="text-center">
+		      	<button class="btn sidebar_btn" id="matches_{{session.day_time.session_slot}}_btn" value="{{session.day_time.session_slot}}" onclick="determine_session(this)">
+					<h6 class="link_text">View {{session.day_time.session_slot}}</h6>
+				</button>
+		      </td>
+		    </tr>
+		    {% endfor %}
+		  </tbody>
+		</table> 
+	</div>
+
+
+</div>
+
+<div class="matches_in_session" id="matches_in_session">
+	{% for session in day_with_session.day_sessions.all %}
+		{% include 'reading_sessions/staff_snippets/matches_in_session.html' with session=session %}
+	{% endfor %}
+</div>
+
+{% endif %}
+
+{% include 'reading_sessions/staff_snippets/user_profile_modal.html' with session=session %}

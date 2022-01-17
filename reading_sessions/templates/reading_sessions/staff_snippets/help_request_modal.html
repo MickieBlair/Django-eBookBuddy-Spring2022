@@ -1,0 +1,129 @@
+
+
+<div class="modal fade" id="help_requests_Modal" tabindex="-1" aria-labelledby="help_requests_Modal_Label" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-scrollable modal-fullscreen p-5">
+    <div class="modal-content">
+      <div class="modal-header custom_bg_light_teal p-2 text-center">
+        <h3 class="modal-title w-100" id="help_requests_Modal_Label">Help Requests</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="close_view_help_requests()"></button>
+      </div>
+      <div class="modal-body ">
+        
+        
+          <div class="scrolling_table_fixed_head table-responsive ">
+        
+        <table class="table table-striped table-sm align-middle">
+         <thead>
+             <tr>
+              <th>From</th>
+              <th class="">Message/Reply</th>
+              <th class="">In Room</th>
+              <!-- <th class=""></th> -->
+              <th class=""></th>
+            </tr>
+          </thead>
+          <tbody id="table_body_all_help_requests">
+         {% for help in all_helps %}
+         <tr class="help_row" id="help_row_{{help.id}}">
+          <td class="ps-2 py-0"> {{help.from_user.full_name}}</td>
+
+          <td>
+            <div class="fw-bold text-decoration-underline">{{help.created}}</div>
+            <div>
+              <!-- <div class="fw-bold">Message: </div> -->
+              <div>
+                {{help.user_message}}
+              </div>
+            </div>
+         <!--    <div>
+              <div class="fw-bold">Reply: </div>
+              <div>
+                {{help.reply}}
+              </div>
+            </div> -->
+          </td>
+          
+
+          <td class="py-0">
+            <div>
+              <a href="{% url 'reading_sessions:room' help.from_room.slug %}" onclick="mark_as_done({{help.id}}, false)">{{help.from_room.name}}</a>
+            </div>
+          </td>
+         <!--  <td class="py-0">           
+            <div>
+              <button value="{{help.id}}" class="btn btn-info btn-sm individual_help_request" onclick="reply_to_help_request({{help.id}})">Reply</button>
+            </div>
+            
+          </td> -->
+          <td><button value="{{help.id}}" class="btn btn-success btn-sm individual_help_request" onclick="mark_as_done({{help.id}}, true)">Mark Done</button></td>
+
+
+         </tr>
+
+            {% endfor %}
+          </tbody>
+
+        </table> 
+        
+        <div class="m-3 border text-center bg_custom_light_gray {% if all_helps.count != 0 %}d-none{% endif %}" id ="no_help_requests">
+            <h2 class="py-3"> No Help Requests </h2>
+          </div>
+ 
+      </div>
+
+
+    
+      
+    
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close_help_modal" onclick="close_view_help_requests()" >Close</button>
+
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="mark_all_as_done" onclick="mark_all_as_done()" >Mark All As Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  const close_help_modal = document.getElementById('close_help_modal');
+
+  function close_view_help_requests(){
+        // console.log("close_view_help_requests")
+        // var checkboxes_session = document.querySelectorAll(".session_radio");
+        // for(let item of checkboxes_session){
+        //     item.checked = false;
+        // }
+        // var new_match_radios = document.querySelectorAll(".new_match_radio");
+
+        // for(let item of new_match_radios){
+        //     item.checked = false;
+        // }
+        // clear_error_manual()
+    }
+
+
+
+    function mark_all_as_done(){
+        // console.log("mark_all_as_done")
+        var individual_buttons = document.querySelectorAll(".individual_help_request");
+        var individual_buttons_length = individual_buttons.length
+        // console.log("individual_buttons_length", individual_buttons_length)
+
+        for(let [index, item]  of individual_buttons.entries()){
+            let individual_redirect_id = item.getAttribute('value');
+            // mark_as_done(individual_redirect_id, true)
+            // console.log(index, individual_redirect_id)
+            if(index != individual_buttons_length -1){
+              mark_as_done(individual_redirect_id, false)
+            } else{
+              mark_as_done(individual_redirect_id, true)
+            }
+        }
+
+        close_help_modal.click()
+    }
+
+</script>

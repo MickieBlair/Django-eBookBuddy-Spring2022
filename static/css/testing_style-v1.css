@@ -1,0 +1,28 @@
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body{
+	/*background-image: url('./../images/pattern_triangle.png');*/
+	/*background-size: contain;*/
+	/*background-position: fixed;*/
+    min-height:100vh;
+    display: flex;
+    flex-flow: column nowrap;
+	justify-content: space-between;
+	background-color: #f9fafb0f;
+  }
+
+.main_content{
+	margin-top: 60px;
+	flex: 1 1 auto;
+	padding: 0 0 0;	
+}
+
+
+.react{
+  /*height: calc(100% - 60px);*/
+  height: 100%;
+}

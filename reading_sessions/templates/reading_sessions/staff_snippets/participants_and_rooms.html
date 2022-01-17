@@ -1,0 +1,38 @@
+<div class="outer_session_div_rooms" id="outer_session_div_rooms">
+    <div class="session_slot_attendance" id="attendance_for">
+        <div class="session_description">
+            <div class="w-100 h-100 d-inline-flex align-items-center border-bottom">
+                <div class="flex-grow-1">
+                    <h5 class=" m-0 p-0">Rooms</h5>
+                </div>
+                <div class="pe-1">
+                    <button class="btn btn_sm btn-warning"  id="one_by_one_btn"  onclick="display_room_divs(this.id)">One By One</button> <!-- all_rooms_one_by_one() -->
+                </div>
+                <div class="pe-1">
+                    <button class="btn btn_sm btn-warning"  id="this_room_btn"  onclick="display_room_divs(this.id)">This Room</button><!-- get_room_participants() -->
+                </div>
+                <div>
+                    <button class="btn btn_sm btn-warning"  id="all_rooms_btn"  onclick="display_room_divs(this.id)">All Rooms</button><!-- get_all_rooms() -->
+                </div>
+            </div>
+
+        </div>
+   
+       <div class="room_call_divs" id="show_ws_rooms_btn">
+           {% include 'reading_sessions/staff_snippets/table_rooms_ws.html' %}
+       </div>
+       <div class="room_call_divs" id="show_one_by_one_btn">
+          {% include 'reading_sessions/staff_snippets/one_by_one_rooms.html' %}
+       </div>
+       <div class="room_call_divs" id="show_this_room_btn">
+           {% include 'reading_sessions/staff_snippets/this_room.html' %}
+       </div>
+       <div class="room_call_divs" id="show_all_rooms_btn">
+           {% include 'reading_sessions/staff_snippets/all_rooms_call.html' %}
+       </div>
+ 
+    </div>
+</div>
+    
+      
+        

@@ -1,0 +1,46 @@
+
+
+<div class="modal fade" id="sendMessageModal" tabindex="-1" aria-labelledby="sendMessageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen p-5">
+    <div class="modal-content">
+      <div class="modal-header custom_bg_light_teal p-2 text-center">
+        <h5 class="modal-title w-100" id="sendMessageModalLabel">Send Message</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="close_notify_all()"></button>
+      </div>
+      <div class="modal-body">
+      	<h6><span class="fw-bold">From:</span> {{request.user.full_name}} <input type="hidden" value="{{request.user.full_name}}" id="notify_from_user_id"></h6>
+        <div class="d-inline-flex w-100 align-items-center pb-3" onclick="clear_notify_error()">
+          <div class="pe-3">
+            <label class="fw-bold">To:</label>
+          </div>
+          <div class="d-inline-flex justify-content-center align-items-center pe-3">
+            <input class="session_radio" type="radio" checked name="to_group" value="All" id="notify_all_default">
+            <label>All</label>
+          </div> 
+          <div class="d-inline-flex justify-content-center align-items-center pe-3">
+            <input class="session_radio" type="radio" name="to_group" value="Reader View">
+            <label>Reader View</label>
+          </div> 
+          <div class="d-inline-flex justify-content-center align-items-center pe-3">
+            <input class="session_radio" type="radio" name="to_group" value="Student View">
+            <label>Student View</label>
+          </div> 
+       
+          <div class="d-inline-flex justify-content-center align-items-center">
+            <input class="session_radio" type="radio" name="to_group" value="Staff View">
+            <label>Staff View</label>
+          </div>           
+        </div>
+
+        <textarea class="form-control" type="text" name="message_to_all" id="message_to_all" rows=7 onfocus="clear_notify_error()"></textarea>
+      </div>
+      <div class="modal-footer">
+        <div class="error w-100 text-center" id="notify_error"></div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close_to_all" onclick="close_notify_all()">Close</button>
+        <button type="button" class="btn btn-primary" onclick="send_msg_to_all()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

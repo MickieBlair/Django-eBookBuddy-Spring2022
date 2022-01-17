@@ -1,0 +1,239 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+{% load users_extras %}
+
+{% block content %}
+<div class="fixed_height_registration">
+<div class="page_title_bar">
+  <div class="row  w-100">
+      <div class="col d-grid align-items-end">
+        <h3 class="m-0 p-0 page_h3">{{role}} Users  - {{count}} </h3>
+      </div>
+      <div class="col d-flex justify-content-center align-items-end pe-5">
+        <div class="d-inline-flex ">
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_teal btn-sm fixed_width_90px" href="{% url 'site_admin:view_users' 'All' %}">All</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_teal btn-sm fixed_width_90px" href="{% url 'site_admin:view_users' 'Staff' %}">Staff</a>
+          </div>
+          <div class="pe-1">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm custom_bg_dark_teal  dropdown-toggle fixed_width_90px" data-bs-toggle="dropdown" aria-expanded="false">
+            Volunteers</button>
+              <ul class="dropdown-menu py-0 bg-light">
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Volunteer_No_Team' %}">Needs Team - {{needs_team_count}}</a></li>
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Volunteer_With_Team' %}">Has Team  - {{has_team_count}}</a></li>              
+              </ul>
+            </div>
+          </div>
+          <div class="pe-1">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm custom_bg_dark_teal  dropdown-toggle fixed_width_90px" data-bs-toggle="dropdown" aria-expanded="false">
+            Students</button>
+              <ul class="dropdown-menu py-0 bg-light">
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Student' %}">All Students</a></li>
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Matched' %}">Matched</a></li>
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Unmatched' %}">Unmatched</a></li> 
+              </ul>
+            </div>
+          </div>
+          
+          <div class="pe-1">
+            <div class="btn-group pe-1">
+              <button type="button" class="btn btn-sm custom_bg_dark_teal  dropdown-toggle fixed_width_90px" data-bs-toggle="dropdown" aria-expanded="false">
+            Readers</button>
+              <ul class="dropdown-menu py-0 bg-light">
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Reader' %}">All Readers</a></li>
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Open' %}">Open Slots</a></li>
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Full' %}">No Open</a></li> 
+              </ul>
+            </div>
+          </div>           
+        </div>        
+      </div>      
+      <div class="col col-lg-3 p-0 d-inline-flex justify-content-end align-items-end">
+        <form class="form-inline w-100" id="searchForm" method="GET">
+          <div class="d-inline-flex w-100">
+            <div class="flex-grow-1 pe-1">
+              <input class="form-control" type="text" placeholder="Search Users..." name="q" id="id_q"> 
+            </div>
+            <div class="">
+              <button type="submit" class="search_button"><i class="fas fa-search search_icon"></i></button>
+            </div>
+          
+        </div>      
+      </form>
+      </div>
+    </div>
+</div>
+
+<div class="stats_bar">
+  <div class="container-fluid my-3 border-top border-bottom bg-light">
+    <div class="row row-cols-5 gx-0 w-100">
+      <div class="col text-center">    
+          <h6 class="py-2 m-0">Users = {{total_users}}</h6>            
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Staff = {{staff_count}}</h6>
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Volunteers = {{volunteer_count}}</h6>
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Students = {{student_count}}</h6>
+      </div>      
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Readers = {{reader_count}}</h6>
+      </div>     
+    </div>
+  </div>
+</div>
+<div class="table-responsive scrolling_table_fixed_head">
+  <table class="table table_sm table-striped align-middle">
+    <thead class="fw-bold" >
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Full Name</th>
+        <th>Account</th>
+        <th>Roles</th>
+        <th>Team</th>
+        <th>Match Status</th>
+        <th>User Info</th>
+      </tr>
+    </thead>
+    <tbody >
+
+    {% for member in members %}
+      <tr>
+        <td>{{member.id}}</td>
+        <td>{{member.username}}</td>
+        <td>{{member.full_name}}</td>
+        <td>
+          <a class="btn btn-sm btn-warning" href="{% url 'site_admin:edit_user' member.id %}">Edit</a>
+          
+        </td>
+        <td>
+          <ul class="p-0 m-0 list-unstyled">
+            {% for role in member.roles.all %}
+            <li><text class="font_12">{{role}}</text></li>
+            {% endfor %}
+          </ul>
+        </td>
+        <td class="font_12">
+          {% if member|is_volunteer %}        
+            {% if member|team_info %}
+            
+
+
+              {% if member.team_info.team_role == "Coordinator" %}
+              <div>
+              <text class="fw-bold">Role: </text><text> {{member.team_info.team_role}}</text>              
+            </div>
+              <div>
+              <text class="fw-bold">Mega: </text><text>   {{member.team_info.mega}}</text>              
+              </div>
+
+              {% elif member.team_info.team_role == "Team Leader" %}
+              <div>
+              <text class="fw-bold">Role: </text><text> {{member.team_info.team_role}}</text>              
+            </div>
+              <div>
+              <text class="fw-bold">Mega: </text><text>   {{member.team_info.mega}}</text>              
+              </div>
+              <div>
+                <text class="fw-bold">Team: </text><text> {{member.team_info.team.name}}</text>              
+              </div>
+              
+              {% elif member.team_info.team_role == "Member" %}
+              <div>
+              <text class="fw-bold">Role: </text><text> {{member.team_info.team_role}}</text>              
+            </div>
+               <div>
+              <text class="fw-bold">Mega: </text><text>   {{member.team_info.mega}}</text>              
+              </div>
+              <div>
+                <text class="fw-bold">Team: </text><text> {{member.team_info.team.name}}</text>              
+              </div>
+               <div class="">
+                <a class="btn btn-sm custom_bg_light_purple" href="{% url 'site_admin:team_info' member.id %}">Edit Team</a>
+              </div>
+
+              {% else %}
+              {% if member|team_status == "Coordinator" %}
+              <div>
+                  Assign To Mega Team      
+              </div>
+              <div class="">
+                <a class="btn btn-sm custom_bg_light_purple" href="{% url 'site_admin:mega_teams' %}">Teams</a>
+              </div>
+              {% elif member|team_status == "Team Leader" %}
+              <div>
+                  Assign To Team      
+              </div>
+              <div class="">
+                <a class="btn btn-sm custom_bg_light_purple" href="{% url 'site_admin:mega_teams' %}">Teams</a>
+              </div>
+              {% elif member|team_status == "Member" %}
+              <div class="">
+                <a class="btn btn-sm custom_bg_light_purple" href="{% url 'site_admin:team_info' member.id %}">Assign Team</a>
+              </div>
+
+              {% endif %}
+
+
+              {% endif %}
+            
+            {% endif %}
+          {% endif %}
+        </td>
+        <td>
+          {% if member|user_status == "Reader" %}
+          <div>
+            <text class="fw-bold font_12">Open Slots: <span class="fw-normal">{{member.reader_match_profile.open_slot_count}} </span></text>
+          </div>
+          <div>
+            <text class="fw-bold font_12">Matches: <span class="fw-normal">{{member.reader_match_profile.get_buddies_string}} </span></text>
+          </div>
+
+          {% elif member|user_status == "Student" %} 
+          <div>
+            <text class="fw-bold font_12">Match Needed: <span class="fw-normal">{% if member.student_match_profile.match_needed %} Yes {% else %} No {% endif%} </span></text>
+          </div>
+          <div>
+            <text class="fw-bold font_12">Match: <span class="fw-normal"> {{member.student_match_profile.buddy}}</span></text>
+          </div>        
+         
+          {% endif %}
+        </td>
+        <td>         
+            {% if member.staff_user %}
+            <a class="" href="{% url 'site_admin:staff_review' member.staff_user.id %}">View</a>
+            {% elif member.vol_user %}
+            <a class="" href="{% url 'site_admin:volunteer_review' member.vol_user.id %}">View</a>
+            {% elif member.student_user %}
+            <a class="" href="{% url 'site_admin:student_review' member.student_user.id %}">View</a>
+            {% endif %}
+        </td>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+
+
+</div>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+

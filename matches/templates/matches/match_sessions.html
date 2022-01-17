@@ -1,0 +1,162 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+{% load match_extras %}
+
+{% block content %}
+<div class="fixed_height_registration">
+<div class="page_title_bar">
+  <div class="row  w-100">
+      <div class="col d-grid align-items-end">
+        <h3 class="m-0 p-0 page_h3">{{match}} Sessions</h3>
+      </div>
+<!--       <div class="col d-flex justify-content-center align-items-end pe-5">
+        <div class="d-inline-flex ">
+          <div class="pe-1">
+            <a class="btn bg-success btn-sm fw-bold" href="{% url 'site_admin:create_match' %}">Create New</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_purple btn-sm fixed_width_90px text-white" href="{% url 'site_admin:view_scheduled' 'All' %}">All</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_purple btn-sm fixed_width_90px text-white" href="{% url 'site_admin:view_scheduled' 'Active' %}">Active</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_purple btn-sm fixed_width_90px text-white" href="{% url 'site_admin:view_scheduled' 'Inactive' %}">Inactive</a>
+          </div>
+                  
+        </div>        
+      </div>  -->     
+<!--       <div class="col col-lg-3 p-0 d-inline-flex justify-content-end align-items-end">
+        <form class="form-inline w-100" id="searchForm" method="GET">
+          <div class="d-inline-flex w-100">
+            <div class="flex-grow-1 pe-1">
+              <input class="form-control" type="text" placeholder="Search Matches..." name="q" id="id_q"> 
+            </div>
+            <div class="">
+              <button type="submit" class="search_button"><i class="fas fa-search search_icon"></i></button>
+            </div>
+          
+        </div>      
+      </form>
+      </div> -->
+    </div>
+</div>
+
+<div class="stats_bar">
+  <div class="container-fluid my-3 border-top border-bottom bg-light">
+    <div class="row row-cols-4 gx-0 w-100">
+      <div class="col text-center">    
+          <h6 class="py-2 m-0">Scheduled = {{count}}</h6>            
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Remaining = {{remaining_count}}</h6>
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Successful = {{successful_count}}</h6>
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Incomplete = {{incomplete_count}}</h6>
+      </div>     
+    </div>
+  </div>
+</div>
+{% if records.all.count > 0 %}
+<div class="table-responsive scrolling_table_fixed_head">
+  <table class="table table_sm table-striped align-middle">
+    <thead class="fw-bold" >
+      <tr>
+        <th>Date</th>
+        <th>Slot</th>
+        <th >Status</th>
+        <th class="text-center">Student</th>
+        <th class="text-center">Reader</th>
+        <th class="text-center">Session</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody >
+
+    {% for record in records %}
+      <tr>
+        <td>{{record.session.date}}</td>
+        <td>{{record.session.day_time.get_short_name}}</td>
+        <td>{{record|status}}</td>
+        <td>
+          <div class="text-center">{{record.get_student.full_name}}</div>
+            <div class="text-center">
+              {% if record.student_present %}
+                <i class="fas fa-check match_check_green" id="user_{{record.get_student.id}}"></i>
+              {% else %}
+                <i class="fas fa-times match_times_red" id="user_{{record.get_student.id}}"></i>
+              {% endif %}
+              
+            </div>
+            <div class="text-center"> 
+              {% if record.student_present %}
+                {% if record.student_time_in %}
+                  {{record.student_time_in}}
+
+                  {% if not record.student_reassigned %}
+                   - {% if record.student_time_out %}{{record.student_time_out}}{%else%} N/A {%endif%}
+                  {% endif %}
+
+
+                {% endif %}
+              {% endif %}
+            </div>   
+        </td>
+        <td>
+          <div class="text-center">{{record.get_reader.full_name}}</div>
+            <div class="text-center">
+              {% if record.reader_present %}
+                  <i class="fas fa-check match_check_green" id="user_{{record.get_buddy.id}}" ></i>
+              {% else %}
+                  <i class="fas fa-times match_times_red" id="user_{{record.get_buddy.id}}"></i>
+              {% endif %}
+            </div>
+            <div class="text-center">
+              {% if record.reader_present %}
+                {% if record.reader_time_in %}
+                  {{record.reader_time_in}}
+
+                  {% if not record.reader_reassigned %}
+                   - {% if record.reader_time_out %}{{record.reader_time_out}}{%else%} N/A {% endif %}
+
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+              </div>
+        </td>
+        <td>Session Stuff</td>
+        <td>Notes</td>
+
+
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="p-3">
+  <div class="border bg-light">
+    <h5 class="p-4 m-0 text-center">Match Set to Inactive Before Any Sessions</h5>
+  </div>
+  
+</div>
+
+
+{% endif %}
+
+</div>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+

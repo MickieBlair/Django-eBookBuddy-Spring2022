@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+{% include 'reading_sessions/base_snippets/testing_head.html' %} 
+<body>
+
+{% include 'reading_sessions/base_snippets/testing_nav.html' %} 
+
+<div class="main_content" id="main_content">
+
+	{% block content %}
+	{% endblock content %}
+</div>
+{% include 'reading_sessions/testing_meeting_json_variables.html' %} 
+{% include 'reading_sessions/base_snippets/testing_footer.html' %} 
+</body>
+</html>

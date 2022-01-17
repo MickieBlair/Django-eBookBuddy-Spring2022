@@ -1,0 +1,25 @@
+<button class="d-none" data-bs-toggle="modal" data-bs-target="#staffchatErrorModal" id="staff_chat_error_button">
+    <h6 class="link_text">Staff Chat Error</h6> 
+</button>
+
+
+<div class="modal fade" id="staffchatErrorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staffchatModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header custom_bg_light_teal p-2 text-center">
+        <h5 class="modal-title w-100" id="staffchatModalLabel">Staff Chat Error</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="close_staff_chat_error()"></button>
+      </div>
+      <div class="modal-body text-center">
+      	<p id="id_client_error_modal_body">Something went wrong.</p>
+
+      </div>
+      <div class="modal-footer">
+        <div class="error w-100 text-center" id="notify_error"></div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close_websocket_error" onclick="close_staff_chat_error()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+

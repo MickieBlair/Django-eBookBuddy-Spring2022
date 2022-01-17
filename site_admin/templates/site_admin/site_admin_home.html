@@ -1,0 +1,134 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="row w-100 py-3 m-0">
+	{% if registrations_open_volunteers %}
+	<div class="col d-flex justify-content-center align-items-center w-100 px-5">
+		<div class='card w-100'>
+			<div class="card-header custom_bg_dark_teal text-center">
+				<h5 class="m-0 p-0"> Volunteer Registrations</h5>				
+			</div>
+			<div class="card-body px-3">
+				<div class="d-inline-flex w-100 p-3 border">
+					<div class="flex-grow-1">
+					<label class="fw-bold "> Total Registrations: </label> 
+					</div>
+					<div class="text-end pe-3">
+						<text class="pe-3">{{total_vol_registrations}}</text>
+					</div>
+					<div class="text-end">
+						<a class="btn btn-primary btn-sm" href="{% url 'site_admin:registrations_volunteers' 'All' %}">View</a>
+					</div>
+				</div>
+
+				<div class="d-inline-flex w-100 p-3 border">
+					<div class="flex-grow-1">
+					<label class="fw-bold "> Approved Registrations: </label> 
+					</div>
+					<div class="text-end pe-3">
+						<text class="pe-3">{{vol_approved_count}}</text>
+					</div>
+					<div class="text-end">
+						<a class="btn btn-success btn-sm" href="{% url 'site_admin:registrations_volunteers' 'Approved' %}">View</a>
+					</div>
+				</div>
+
+				<div class="d-inline-flex w-100 p-3 border">
+					<div class="flex-grow-1">
+					<label class="fw-bold "> Pending Registrations: </label> 
+					</div>
+					<div class="text-end pe-3">
+						<text class="pe-3">{{vol_pending_count}}</text>
+					</div>
+					<div class="text-end">
+						<a class="btn btn-warning btn-sm" href="{% url 'site_admin:registrations_volunteers' 'Pending' %}">View</a>
+					</div>
+				</div>
+
+				<div class="d-inline-flex w-100 p-3 border">
+					<div class="flex-grow-1">
+					<label class="fw-bold "> Denied Registrations: </label> 
+					</div>
+					<div class="text-end pe-3">
+						<text class="pe-3">{{vol_denied_count}}</text>
+					</div>
+					<div class="text-end">
+						<a class="btn btn-danger btn-sm" href="{% url 'site_admin:registrations_volunteers' 'Denied' %}">View</a>
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>		
+	</div>
+	{% endif %}
+
+	{% if registrations_open_student %}
+	<div class="col d-flex justify-content-center align-items-center w-100 px-5">
+		<div class='card w-100'>
+			<div class="card-header custom_bg_light_teal text-center">
+				<h5 class="m-0 p-0"> Student Registrations</h5>				
+			</div>
+			<div class="card-body px-3">
+				<div class="d-inline-flex w-100 p-3 border">
+					<div class="flex-grow-1">
+					<label class="fw-bold "> Total Registrations: </label> 
+					</div>
+					<div class="text-end pe-3">
+						<text class="pe-3">{{total_stu_registrations}}</text>
+					</div>
+					<div class="text-end">
+						<a class="btn btn-primary btn-sm" href="{% url 'site_admin:registrations_students' 'All' %}">View</a>
+					</div>
+				</div>
+
+				<div class="d-inline-flex w-100 p-3 border">
+					<div class="flex-grow-1">
+					<label class="fw-bold "> Approved Registrations: </label> 
+					</div>
+					<div class="text-end pe-3">
+						<text class="pe-3">{{stu_approved_count}}</text>
+					</div>
+					<div class="text-end">
+						<a class="btn btn-success btn-sm" href="{% url 'site_admin:registrations_students' 'Approved' %}">View</a>
+					</div>
+				</div>
+
+				<div class="d-inline-flex w-100 p-3 border">
+					<div class="flex-grow-1">
+					<label class="fw-bold "> Pending Registrations: </label> 
+					</div>
+					<div class="text-end pe-3">
+						<text class="pe-3">{{stu_pending_count}}</text>
+					</div>
+					<div class="text-end">
+						<a class="btn btn-warning btn-sm" href="{% url 'site_admin:registrations_students' 'Pending' %}">View</a>
+					</div>
+				</div>
+
+				<div class="d-inline-flex w-100 p-3 border">
+					<div class="flex-grow-1">
+					<label class="fw-bold "> Waitlist Registrations: </label> 
+					</div>
+					<div class="text-end pe-3">
+						<text class="pe-3">{{stu_waitlist_count}}</text>
+					</div>
+					<div class="text-end">
+						<a class="btn btn-danger btn-sm" href="{% url 'site_admin:registrations_students' 'Waitlist' %}">View</a>
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>		
+	</div>
+	{% endif %}
+
+	
+</div>
+
+
+{% endblock content %}

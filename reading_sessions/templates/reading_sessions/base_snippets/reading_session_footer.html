@@ -1,0 +1,28 @@
+ {% load static %}
+ {% load compress %}
+
+  <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>  
+
+
+{% compress js %}
+  <script src="{% static 'js/site_scripts.js' %}" charset="utf-8"></script>
+  <script src="{% static 'js/session_scripts.js' %}" charset="utf-8"></script>
+  {% if view == "Staff View" %}
+   <script src="{% static 'js/staff_chat.js' %}" charset="utf-8"></script>
+  {% endif %}
+  <script src="{% static 'js/ws_reading_session.js' %}" charset="utf-8"></script>
+{% endcompress %}
+
+{% if jitsi_on %} 
+<!-- include 'testing/snippets/jitsi_data_websocket.html' -->
+<script src='https://sessions.goebookbuddy.org/external_api.js'></script>
+{% compress js %}
+  <script src="{% static 'js/jitsi_script.js' %}" charset="utf-8"></script>
+   <script src="{% static 'js/_jitsi_websocket_scripts.js' %}" charset="utf-8"></script>
+{% endcompress %}
+{% endif %}

@@ -1,0 +1,687 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load volunteer_extras %}
+
+{% block content %}
+<div class="py-4">
+	<div class="card my-3">
+		<div class="card-header custom_bg_light_teal">
+			<div class="d-grid w-100 justify-content-center">
+				<div class="text-center">
+					<h3 class="m-0 p-0">Volunteer Registration
+					{% if active_programs.count == 1 %}
+					 - {{active_programs.first.program}} - {{active_programs.first.name}}
+					{% endif %}
+				</h3>
+				</div>
+				{% if active_programs.count == 1 %}
+				<div class="text-center" >
+					<div class="pt-2">
+						<h5 class="m-0 p-0">
+						Session Dates: {{active_programs.first.start_date}} - {{active_programs.first.end_date}}
+						</h5>
+					</div>					
+				</div>
+				{% endif %}					
+			</div>			
+		</div>
+		<div class="card-body ">
+			<form enctype="multipart/form-data" method="post" id="volunteer_registration_form" onsubmit="return false;">
+				{% csrf_token %}
+			    {% for field in form %}
+
+			    	{% if field.name == 'session_choices' %}
+			    	<div class="fieldWrapper bg-light border my-2 py-1 w-100" id="manual_fieldWrapper_{{field.name}}">
+			    		<div class="inline_grid w-100">
+				    		
+			    			<div class="pe-2 fw-bold number_label">
+			    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+			    			</div>
+			    			
+			    			<div class="flex-grow-1 eng_text">
+			    				<label>{{ field.label_tag }}</label>
+			    			</div>
+			    					    			
+			    		</div>
+				    	<div class="errors text_center w-100 pe-3 field_indent" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        {% endfor %}
+				    	</div>
+				    	<div class="session_choices_table_div">
+				    		<div class="table-responsive pt-1">
+				    			<table class="table table-striped table_small align-middle">
+				    				<thead>
+				    					<tr>
+				    						<th></th>
+				    						{% for day in session_day_choices %}
+				    							<th id="day_choice-{{day.id}}" class='text-center table_choices_col_heads' scope="column">{{day}}</th>
+				    						{% endfor %}
+				    					</tr>
+				    				</thead>
+				    				<tbody>
+				    					{% for time in session_time_choices %}
+				    						<tr>
+				    							<td class="table_choices_row_names">{{time}}</td>
+				    							{% for day in session_day_choices %}
+					    							<td id="day_time-{{day.id}}" class='text-center' scope="column">    			
+							    						{% for item in session_meeting_choices2 %}
+							    							{% if item.1.day_option == day and item.1.time_option == time%}
+						    								<div>
+						    									<input type="checkbox" name="{{field.name}}" value="{{item.1.id}}" class="registration_radio" onclick="clear_input_errors('{{field.name}}')" id="id_session_choices_{{item.0}}" {% if item.1 in cleaned_data_sessions %} checked {% endif %}>
+						    								</div> 
+						    								{% endif %} 
+							    						{% endfor %}
+				    							
+					    							</td>
+					    						{% endfor %}
+
+				    						</tr>
+				    					{% endfor %}
+				    				</tbody>
+				    			</table>
+				    		</div>
+				    	</div>
+			    	</div>
+			    	{% elif field.name == "ref_name_1" or field.name == "ref_name_2" %}
+			    	
+			    	<div class="fieldWrapper bg-light  border-start border-end {% if field.name == 'ref_name_1' %}mt-2 border-top {% endif %}  pt-1 w-100">
+			    		{% if field.name == "ref_name_1" %}
+			    		<div class="inline_grid w-100">
+				    		
+			    			<div class="pe-2 fw-bold number_label">
+			    				<label class="eng_text"><span class="text-danger">{{ "references"|question_required}}</span>{{ "references"|question_number}}</label>
+			    			</div>
+			    			
+			    			<div class="flex-grow-1 eng_text">
+			    				<label>{{ ref_q.eng_text}}</label>
+			    			</div>
+			    					    			
+			    		</div>
+			    		<div class="py-1 field_indent"> 
+			    			<h5 class="eng_text ">{{ref_msg.message_content}}</h5>
+			    		</div>
+			    		<div class="field_indent">
+			    			<h5 class="eng_text py-2 text-decoration-underline">Reference 1</h5>
+			    		</div>
+			    		
+			    		{% else %}
+			    		<div class="field_indent">
+			    			<h5 class="eng_text py-3 text-decoration-underline">Reference 2</h5>
+			    		</div>
+			    		
+			    		{% endif %}
+			    		<div class="reference_fields field_indent ">
+			    			<div>
+			    				<div class="eng_text">
+						    		<label>{{ field.label_tag }}</label>
+						    	</div>			    				
+			    			</div>
+			    			<div class="flex-grow-1">
+			    				<div class="w-100 pe-3">
+						    		{{field}}
+						    	</div>			    				
+			    			</div>		    			
+			    		</div>
+			    		<div class="d-grid justify-content-center w-100">
+				    			<div class="errors text-center w-100" id="{{field.name}}_errors">
+					    		{% for error in field.errors %}
+						            <div class="alert alert-danger px-3 py-0 mb-3 text-center ">
+						                <strong>{{ error|escape }}</strong>
+						            </div>
+						        {% endfor %}
+				    		</div>
+			    		</div>
+			    		
+					 </div>
+
+					{% elif field.name == "ref_email_1" or field.name == "ref_email_2" %}
+					<div class="fieldWrapper bg-light border-start border-end pt-1 w-100">
+			    		
+			    		<div class="reference_fields field_indent ">
+			    			<div>
+			    				<div class="eng_text">
+						    		<label>{{ field.label_tag }}</label>
+						    	</div>			    				
+			    			</div>
+			    			<div class="flex-grow-1">
+			    				<div class="w-100 pe-3">
+						    		{{field}}
+						    	</div>
+			    				
+			    			</div>
+			    			
+			    		</div>
+
+			    		<div class="d-grid justify-content-center w-100">
+				    			<div class="errors text-center w-100" id="{{field.name}}_errors">
+					    		{% for error in field.errors %}
+						            <div class="alert alert-danger px-3 py-0 mb-3 text-center ">
+						                <strong>{{ error|escape }}</strong>
+						            </div>
+						        {% endfor %}
+				    		</div>
+			    		</div>
+					 </div>
+
+					 {% elif field.name == "ref_phone_1" or field.name == "ref_phone_2" %}
+					<div class="fieldWrapper bg-light border-start border-end  pt-1 w-100">
+			    		
+			    		<div class="reference_fields field_indent">
+			    			<div>
+			    				<div class="eng_text">
+						    		<label>{{ field.label_tag }}</label>
+						    	</div>			    				
+			    			</div>
+			    			<div class="flex-grow-1">
+			    				<div class="w-100 pe-3">
+						    		{{field}}
+						    	</div>
+			    				
+			    			</div>
+			    			
+			    		</div>
+
+			    		<div class="d-grid justify-content-center w-100">
+				    			<div class="errors text-center w-100" id="{{field.name}}_errors">
+					    		{% for error in field.errors %}
+						            <div class="alert alert-danger px-3 py-0 mb-3 text-center ">
+						                <strong>{{ error|escape }}</strong>
+						            </div>
+						        {% endfor %}
+				    		</div>
+			    		</div>
+					 </div>
+					 {% elif field.name == "ref_relationship_1" or field.name == "ref_relationship_2" %}
+					<div class="fieldWrapper bg-light border-start border-end  pt-1 w-100 {% if field.name == 'ref_relationship_2' %} border-bottom pb-1{% endif %} ">
+			    		
+			    		<div class="reference_fields field_indent ">
+			    			<div>
+			    				<div class="eng_text">
+						    		<label>{{ field.label_tag }}</label>
+						    	</div>			    				
+			    			</div>
+			    			<div class="flex-grow-1">
+			    				<div class="w-100 pe-3">
+						    		{{field}}
+						    	</div>
+			    				
+			    			</div>
+			    			
+			    		</div>
+
+			    		<div class="d-grid justify-content-center w-100">
+				    			<div class="errors text-center w-100" id="{{field.name}}_errors">
+					    		{% for error in field.errors %}
+						            <div class="alert alert-danger px-3 py-0 mb-3 text-center ">
+						                <strong>{{ error|escape }}</strong>
+						            </div>
+						        {% endfor %}
+				    		</div>
+			    		</div>
+					 </div>
+					 {% elif field.name == "other_reasons" or field.name == "reason_not_listed"%}
+					<div class="fieldWrapper bg-light {% if field.name == 'other_reasons' %}border-top border-start border-end mt-2{% else %} border-bottom border-start border-end mb-2 {%endif%}  py-1 w-100" id="fieldWrapper_{{field.name}}">
+						{% if field.name == "other_reasons" %}
+						<div class="inline_grid  w-100">
+				    		
+			    			<div class="pe-2 fw-bold number_label">
+			    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+			    			</div>
+			    			
+			    			<div class="flex-grow-1 eng_text">
+			    				<label>{{ field.label_tag }}</label>
+			    			</div>
+			    					    			
+			    		</div>
+				    	{% else %}
+				    	<div class="eng_text d-none">
+				    		<label>{{ field.label_tag }}</label>
+				    	</div>
+				    	{% endif %}
+				    	<div class="w-100 pe-3 field_indent">
+				    		{{field}}
+				    	</div>
+
+			    	</div>
+			    	{% elif field.name == "convicted" %}
+			    	<div class="fieldWrapper bg-light border-top border-start border-end mt-2 pt-1 w-100" id="fieldWrapper_{{field.name}}">
+			    		<div class="text-center eng_color pt-3"> 
+			    			<h5 class="m-0 fst-italic text-decoration-underline">{{child_protection_title.message_content}}</h5>		    		
+			    		</div>
+			    		<div class="eng_color message_content_padding fw-bold"> 
+			    			<p class="m-0">
+			    			{{child_protection_p1.message_content}}</p>		    		
+			    		</div> 
+
+			    		<div class="eng_color message_content_padding fw-bold"> 
+			    			<div class="d-inline-flex">
+			    				<div class="fst-italic pe-1">
+			    					I. 
+			    				</div>
+			    				<div>
+			    					<p class="m-0 fst-italic">
+			    			{{child_protection_i.message_content}}</p>	
+			    				</div>
+			    			</div>
+			    				    		
+			    		</div>
+
+			    		<div class="policy_item">
+			    			<div class="inline_grid_2  w-100">				    		
+				    			<div class="pe-2 fw-bold number_label">
+				    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+				    			</div>
+				    			
+				    			<div class="flex-grow-1 eng_text">
+				    				<label>{{ field.label_tag }}</label>
+				    			</div>
+				    					    			
+				    		</div>
+			    		</div>
+
+			    		<div class="errors text_center w-100 pe-3 field_indent_2" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+				    		<div class="field_indent">
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        </div>
+					        {% endfor %}
+				    	</div>
+
+				    	<div class="field_indent_2">
+				    		<div class="w-100 pe-3 field_indent">
+					    		{{field}}
+					    	</div>
+				    	</div>
+				    	
+
+			    	</div>
+			    	{% elif field.name == "convicted_text" %}
+			    	<div class="fieldWrapper bg-light border-start border-end  w-100" id="fieldWrapper_{{field.name}}">
+			    		<div class="field_indent_2 pt-1">
+			    			<div class="inline_grid  w-100">				    		
+				    			<div class="pe-2 fw-bold number_label">
+				    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+				    			</div>
+				    			
+				    			<div class="flex-grow-1 eng_text">
+				    				<label>{{ field.label_tag }}</label>
+				    			</div>
+				    					    			
+				    		</div>
+			    		</div>
+
+			    		<div class="errors text_center w-100 pe-3 field_indent_2" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+				    		<div class="field_indent">
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        </div>
+					        {% endfor %}
+				    	</div>
+
+			    		<div class="field_indent_2">
+				    		<div class="w-100 field_indent pe-3">
+					    		{{field}}
+					    	</div>
+				    	</div>
+			    	</div>
+			    	{% elif field.name == "charges_pending" or field.name == "refused_participation" %}
+
+			    	<div class="fieldWrapper bg-light border-start border-end  pt-1 w-100" id="fieldWrapper_{{field.name}}">
+			    		<div class="policy_item">
+			    			<div class="inline_grid_2  w-100">				    		
+				    			<div class="pe-2 fw-bold number_label">
+				    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+				    			</div>
+				    			
+				    			<div class="flex-grow-1 eng_text">
+				    				<label>{{ field.label_tag }}</label>
+				    			</div>
+				    					    			
+				    		</div>
+			    		</div>
+
+			    		<div class="errors text_center w-100 pe-3 field_indent_2" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+				    		<div class="field_indent">
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        </div>
+					        {% endfor %}
+				    	</div>
+
+				    	<div class="field_indent_2">
+				    		<div class="w-100 pe-3 field_indent">
+					    		{{field}}
+					    	</div>
+				    	</div>
+				    	
+
+			    	</div>
+			    	{% elif field.name == "charges_pending_text" or field.name == "refused_participation_text" %}
+			    	<div class="fieldWrapper bg-light border-start border-end  w-100" id="fieldWrapper_{{field.name}}">
+			    		<div class="policy_item">
+			    			<div class="inline_grid_2  w-100">				    		
+				    			<div class="pe-2 fw-bold number_label">
+				    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+				    			</div>
+				    			
+				    			<div class="flex-grow-1 eng_text">
+				    				<label>{{ field.label_tag }}</label>
+				    			</div>
+				    					    			
+				    		</div>
+			    		</div>
+
+			    		<div class="errors text_center w-100 pe-3 field_indent_2" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+				    		<div class="field_indent">
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        </div>
+					        {% endfor %}
+				    	</div>
+
+			    		<div class="field_indent_2">
+				    		<div class="w-100 pe-3 field_indent">
+					    		{{field}}
+					    	</div>
+				    	</div>
+			    	</div>
+			    	{% elif field.name == "agree_requirements_initials" %}
+			    	<div class="fieldWrapper bg-light border-start border-end pt-3 pb-3 w-100" id="fieldWrapper_{{field.name}}">
+	
+			    		<div class="eng_color message_content_padding fw-bold"> 
+			    			<div class="d-inline-flex">
+			    				<div class="fst-italic pe-1">
+			    					II. 
+			    				</div>
+			    				<div>
+			    					<p class="m-0 fst-italic">
+			    			{{child_protection_ii.message_content}}</p>	
+			    				</div>
+			    			</div>
+			    				    		
+			    		</div>
+				    	
+
+			    		{% for item in child_protection_ii_sub %}
+
+			    		<div class="field_indent pt-3">
+			    			<div class="inline_grid_2  w-100 pe-3">				    		
+				    			<div class="pe-2 number_label">
+				    				<label class="eng_color pe-2">{{item.0}}. </label>
+				    			</div>
+				    			
+				    			<div class="flex-grow-1 eng_color">
+				    				<label>{{item.1.message_content}}</label>
+				    			</div>
+				    					    			
+				    		</div>
+			    		</div>
+
+
+			    		
+
+			    		{% endfor %}
+
+			    		<div class="field_indent_2 pt-3 w-100" >
+				    		<div class="field_indent w-100">
+				    			<div class="inline_grid_box_left w-100">
+				    				<div class="d-grid align-items-center">
+							    		{{field}}
+							    	</div>
+							    	<div class="text-danger ps-3">
+							    		{{ field.name|question_required}}
+							    	</div>
+							    	<div class="eng_text">
+							    		{{field.label_tag }}			
+							    	</div>   				
+				    			</div>				    			
+				    		</div>
+				    		<div class="">
+				    			<div class="errors w-100 field_indent text-center pe-3" id="{{field.name}}_errors ">
+						    		{% for error in field.errors %}
+							            <div class="alert alert-danger mb-1">
+							                <strong>{{ error|escape }}</strong>
+							            </div>
+							        {% endfor %}
+						    	</div>
+				    		</div>
+				    	</div>
+			    		
+			    	</div>
+			    	{% elif field.name == "statements_true_initials" %}
+			    	<div class="fieldWrapper bg-light border-start border-end pt-1 pb-1 w-100" id="fieldWrapper_{{field.name}}">
+			    		<div class="field_indent_2 pt-3 w-100" >
+				    		<div class="field_indent w-100">
+				    			<div class="inline_grid_box_left w-100">
+				    				<div class="d-grid align-items-center">
+							    		{{field}}
+							    	</div>
+							    	<div class="text-danger ps-3">
+							    		{{ field.name|question_required}}
+							    	</div>
+							    	<div class="eng_text">
+							    		{{field.label_tag }}			
+							    	</div>   				
+				    			</div>				    			
+				    		</div>
+				    		<div class="">
+				    			<div class="errors w-100 field_indent text-center pe-3" id="{{field.name}}_errors ">
+						    		{% for error in field.errors %}
+							            <div class="alert alert-danger mb-1">
+							                <strong>{{ error|escape }}</strong>
+							            </div>
+							        {% endfor %}
+						    	</div>
+				    		</div>
+				    	</div>			    		
+			    	</div>
+			    	{% elif field.name == "remove_volunteers_initials" %}
+			    	<div class="fieldWrapper bg-light border-start border-end  pt-1 pb-1 w-100" id="fieldWrapper_{{field.name}}">
+			    		<div class="field_indent_2 pt-3 w-100" >
+			    			<div class="field_indent w-100">
+			    				<div class="inline_grid_box_left w-100">
+				    				<div class="d-grid align-items-center">
+							    		{{field}}
+							    	</div>
+							    	<div class="text-danger ps-3">
+							    		{{ field.name|question_required}}
+							    	</div>
+							    	<div class="eng_text">
+							    		{{field.label_tag }}			
+							    	</div>   				
+				    			</div>	
+			    			</div>
+			    		</div>
+			    		<div class="">
+				    			<div class="errors w-100 field_indent text-center pe-3" id="{{field.name}}_errors ">
+						    		{% for error in field.errors %}
+							            <div class="alert alert-danger mb-1">
+							                <strong>{{ error|escape }}</strong>
+							            </div>
+							        {% endfor %}
+						    	</div>
+				    		</div>
+
+			    	</div>
+			    	{% elif field.name == "full_name_signature" %}
+			    	<div class="fieldWrapper bg-light border-bottom border-start border-end  pt-3 pb-3 w-100" id="fieldWrapper_{{field.name}}">
+			    	
+			    		<div class="pe-3">
+			    			<div class="inline_grid_2  w-100">				    		
+				    			<div class="pe-2 fw-bold number_label">
+				    				<h5 class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span></h5>
+				    			</div>
+				    			
+				    			<div class="flex-grow-1 eng_color fw-bold">
+				    				<h5>{{ field.label_tag }}</h5>
+				    			</div>
+				    					    			
+				    		</div>
+			    		</div>
+			    		<div class="pe-3">
+			    			<div class="errors text_center w-100 field_indent" id="{{field.name}}_errors">
+					    		{% for error in field.errors %}
+						            <div class="alert alert-danger mb-1 pe-3">
+						                <strong>{{ error|escape }}</strong>
+						            </div>
+						        {% endfor %}
+					    	</div>
+			    		</div>
+
+			    		
+
+			    		<div class="pe-3">
+				    		<div class="w-100 field_indent">
+					    		{{field}}
+					    	</div>
+				    	</div>
+			    	</div>
+
+			    	{% elif field.name == "profile_image" %}
+			    	<div class="fieldWrapper bg-light border my-2  py-1 w-100" id="fieldWrapper_{{field.name}}">
+				    	<div class="inline_grid  w-100">
+				    		
+			    			<div class="pe-2 fw-bold number_label">
+			    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+			    			</div>
+			    			
+			    			<div class="eng_text">
+			    				<label>{{ field.label_tag }}</label>
+			    			</div>
+			    					    			
+			    		</div>
+			    		<div class="errors text_center w-100 pe-3 field_indent" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        {% endfor %}
+				    	</div>
+				    	<div class="d-none">
+				    		<div class="row">
+				    			<div class='col'>
+				    				<div class="d-inline-flex">
+				    					<label class="pe-3">X</label><input type="text" name="cropX" id="id_cropX">
+				    				</div>				    				
+				    			</div>
+				    			<div class='col'>
+				    				<div class="d-inline-flex">
+				    					<label class="pe-3">Y</label><input type="text" name="cropY" id="id_cropY">
+				    				</div>
+				    			</div>
+				    			<div class='col'>
+				    				<div class="d-inline-flex">
+				    					<label class="pe-3">W</label><input type="text" name="cropW" id="id_cropW">
+				    				</div>
+				    			</div>
+				    			<div class='col'>
+				    				<div class="d-inline-flex">
+				    					<label class="pe-3">H</label><input type="text" name="cropH" id="id_cropH">
+				    				</div>
+				    			</div>				    			
+				    		</div>
+				    		<div class="row">
+				    			<textarea name="imageString" id="id_image_string"></textarea>  			
+				    		</div>
+				    		
+
+
+				    	</div>
+				    	<div class="d-grid justify-content-center align-items-center w-100">
+				    		<div class="image_div">
+				    			<img class="crop_image" src="" id="id_profile_image_display"> 	
+				    		</div>
+
+				    			
+				    	</div>
+				    	<div class="d-grid justify-content-center align-items-center">
+				    		<div class="w-100 pe-3 image_div text-center pt-2">
+				    		{{field}}
+				    	</div>
+				    	</div>
+
+				    	
+				    </div>
+			    		
+
+			    	{% else %}
+			    					    <div class="fieldWrapper bg-light border my-2 py-1 w-100 {% if field.name|indent_question %} field_indent {% else %} {% endif %} {% if field.name == 'program_semester'%} d-none {% endif %}" id="fieldWrapper_{{field.name}}"> 
+				    	{% if field.name|question_number != "" %}
+				    	<div class="inline_grid  w-100">
+				    		
+			    			<div class="pe-2 fw-bold number_label">
+			    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+			    			</div>
+			    			
+			    			<div class="eng_text">
+			    				<label>{{ field.label_tag }}</label>
+			    			</div>
+			    					    			
+			    		</div>
+			    		{% else %}
+				    	<div class="eng_text ">
+				    		<label>{{ field.label_tag }}</label>
+				    	</div>
+				    	{% endif %}
+				    	<!-- <div class="span_text ">
+				    		{% if field.help_text %}
+				        		<label class="help">{{ field.help_text|safe }}</label>
+				        	{% endif %}
+				    	</div> -->
+				    	<div class="errors text_center w-100 pe-3 field_indent" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        {% endfor %}
+				    	</div>				    	
+				    	<div class="w-100 pe-3 field_indent">
+				    		{{field}}
+				    	</div>
+
+				    	{% if field.name == "program_semester" %}
+				    	<div class="d-none">
+				    		<input type="date" name="chosen_start" id="chosen_start">
+				    	
+					    	{% for program in active_programs %}
+						        <label>{{program}}<input type="date" name="" value='{{program.format_start_date}}' id='program_{{program.id}}'></label>
+						    {% endfor %}
+				    	</div>
+				    	{% endif %}
+				        
+				        
+				    </div>
+
+			    	{% endif %}
+
+			    {% endfor %}
+			</form>
+			<div class="pt-3 text-center">
+					<button class="btn btn-lg custom_bg_muted_green text-white" onclick="submit_vol_reg_form()">Submit Registration</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+{% include 'registration/notify_snippet.html' %}
+
+{{ DATA_UPLOAD_MAX_MEMORY_SIZE|json_script:"max_upload_size" }}	
+
+	
+	
+{% endblock content %}

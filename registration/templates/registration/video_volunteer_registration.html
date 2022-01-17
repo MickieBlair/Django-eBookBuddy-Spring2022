@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load video_extras %}
+
+{% block content %}
+<div class="py-4">
+	<div class="card my-3">
+		<div class="card-header custom_bg_light_teal">
+			<div class="d-grid w-100 justify-content-center">
+				<div class="text-center">
+					<h3 class="m-0 p-0">Volunteer Video Submission
+					</h3>
+				</div>
+				
+			</div>			
+		</div>
+		<div class="card-body ">
+			<form enctype="multipart/form-data" method="post" id="volunteer_video_form" >
+				{% csrf_token %}
+			    {% for field in form %}
+		    	{% if field.name == 'registration' %}
+			    	<div class="fieldWrapper bg-light border my-2 py-1 w-100 d-none" id="manual_fieldWrapper_{{field.name}}">
+			    		<div class="inline_grid w-100">
+				    		
+			    			<div class="pe-2 fw-bold number_label">
+			    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+			    			</div>
+			    			
+			    			<div class="flex-grow-1 eng_text">
+			    				<label>{{ field.label_tag }}</label>
+			    			</div>
+			    					    			
+			    		</div>
+				    	<div class="errors text_center w-100 pe-3 field_indent" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        {% endfor %}
+				    	</div>
+				    	<div class="w-100 pe-3 field_indent">
+				    		{{field}}
+				    	</div>
+
+
+			    	</div>
+			    
+
+			    	{% else %}
+			    	<div class="fieldWrapper bg-light border my-2 py-1 w-100 {% if field.name|indent_question %} field_indent {% else %} {% endif %} {% if field.name == 'program_semester'%} d-none {% endif %}" id="fieldWrapper_{{field.name}}"> 
+				    	{% if field.name|question_number != "" %}
+				    	<div class="inline_grid  w-100">
+				    		
+			    			<div class="pe-2 fw-bold number_label">
+			    				<label class="eng_text"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+			    			</div>
+			    			
+			    			<div class="eng_text">
+			    				<label>{{ field.label_tag }}</label>
+			    			</div>
+			    					    			
+			    		</div>
+			    		{% else %}
+				    	<div class="eng_text ">
+				    		<label>{{ field.label_tag }}</label>
+				    	</div>
+				    	{% endif %}
+				    	<div class="span_text field_indent">
+				    		{% if field.help_text %}
+				        		<label class="help">{{ field.help_text|safe }}</label>
+				        	{% endif %}
+				    	</div>
+				    	<div class="errors text_center w-100 pe-3 field_indent" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+					            <div class="alert alert-danger mb-1">
+					                <strong id="{{field.name}}_error_text">{{ error|escape }}</strong>
+					            </div>
+					        {% endfor %}
+				    	</div>				    	
+				    	<div class="w-100 pe-3 field_indent">
+				    		{{field}}
+				    	</div>
+
+				    					        
+				        
+				    </div>
+
+			    	{% endif %}
+
+			    {% endfor %}
+			    <div class="pt-3 text-center" id="submit_btn_div">
+					<button class="btn btn-lg custom_bg_muted_green text-white" type="submit" id="submit">Submit Video</button>
+				</div>
+			</form>
+
+			<div class="py-5 px-3">
+				    		<div class="d-none" id="top_progress">
+				    			<div class="text-center pb-2">
+					    				<h6 class="m-0 p-0" id="title"> Upload Progress </h6>
+					    			</div>
+					    			<div class="d-none" id="loading_spinner">
+					    				<div class="d-flex justify-content-center">
+										  <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+										    <span class="sr-only">Loading...</span>
+										  </div>
+										</div>
+
+										
+					    	
+					    			</div>
+					    			
+				    		</div>
+				    		<div class="d-flex justify-content-center d-none" id="percent_div">
+				    			<h6 class="" id="percent">0 %</h6>			    			
+				    		</div>
+				    		
+				    		<div class="container not-visible progress" id="progress">
+
+    						</div>
+				    	</div>
+			
+		</div>
+	</div>
+</div>
+
+
+<!-- Button trigger modal -->
+<button id="notifyModalButton" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#notifyModal">  
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="notifyModal" tabindex="-1" aria-labelledby="notifyModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header custom_bg_light_teal">
+		        <h5 class="modal-title" id="notifyModalLabel">Registration Notification</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+      	
+			<div class="w-100 p-3 " id="parent_email">
+		        <p> The email you entered is not associated with a volunteer registration. </p>
+
+		        <p>If you did complete an application with the email, please email the following:</p>
+		        <text> <a href="mailto: info@ebookbuddy.org">Email: info@ebookbuddy.org</a></text>
+
+		        
+		       </div>
+		       
+		      </div>
+		
+		<div class="modal-footer bg-white">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>    
+	      </div> 
+	</div>
+		</div>
+	</div>
+</div>
+
+{{ DATA_UPLOAD_MAX_MEMORY_SIZE|json_script:"max_upload_size" }}	
+{{ error_url|json_script:"error_url" }}	
+	
+	
+{% endblock content %}

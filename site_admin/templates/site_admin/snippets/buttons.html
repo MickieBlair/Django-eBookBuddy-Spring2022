@@ -1,0 +1,82 @@
+<div class="d-flex admin_button_div">
+	<div class="pe-1">
+		<a class="btn bg_dark_green text-white" href="{% url 'site_admin:admin_home' %}">Home</a>
+	</div>
+	{% if request.user.is_superuser %}
+	<div class="pe-1">
+		<a class="btn bg_dark_green text-white" href="{% url 'site_admin:login_logout' 'All' %}">Logs</a>
+	</div>
+	{% endif %}
+
+	<div class="btn-group pe-1">
+		<button type="button" class="btn custom_bg_dark_green  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+	Registrations</button>
+		<ul class="dropdown-menu py-0 bg-light">
+			<li><a class="dropdown-item" href="{% url 'site_admin:registrations_volunteers' 'All' %}">Volunteers</a></li>
+			<li><a class="dropdown-item" href="{% url 'site_admin:registrations_parents' 'All' %}">Parents</a></li>
+			<li><a class="dropdown-item" href="{% url 'site_admin:registrations_students' 'All' %}">Students</a></li>
+			<li><a class="dropdown-item" href="{% url 'site_admin:registrations_staff' 'All' %}">Staff</a></li> 
+		</ul>
+	</div>
+
+	<div class="btn-group pe-1">
+		<button type="button" class="btn custom_bg_dark_teal  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+	Users</button>
+		<ul class="dropdown-menu py-0 bg-light">
+			<li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'All' %}">All Users</a></li>
+			<li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Staff' %}">Staff</a></li> 
+			<li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Volunteer' %}">Volunteers</a></li> 
+			<li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Student' %}">Students</a></li>			
+			<li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Reader' %}">Readers</a></li> 
+			<li class="py-0"><hr class="dropdown-divider"></li>
+		      <li class="text-center pb-2" >
+		        <a class="btn btn-sm bg-success bg-gradient fw-bold" href="{% url 'site_admin:create_user' %}">
+		          Create New User
+		        </a>
+		      </li>
+		</ul>
+	</div>
+
+	<div class="btn-group pe-1">
+		<button type="button" class="btn custom_bg_dark_purple  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+	Scheduled Matches</button>
+		<ul class="dropdown-menu py-0 bg-light">
+			
+			<li><a class="dropdown-item" href="{% url 'site_admin:view_scheduled' 'Active' %}">Active Scheduled</a></li> 
+			<li><a class="dropdown-item" href="{% url 'site_admin:view_scheduled' 'Inactive' %}">Inactive Scheduled</a></li>	
+			<li><a class="dropdown-item" href="{% url 'site_admin:view_scheduled' 'All' %}">All Scheduled Matches</a></li>	
+			<li class="py-0"><hr class="dropdown-divider"></li>
+		      <li class="text-center pb-2">
+		        <a class=" btn btn-sm bg-success bg-gradient fw-bold" href="{% url 'site_admin:create_match' %}">
+		          Create Scheduled Match
+		        </a>
+		      </li>
+		</ul>
+	</div>
+
+	<div class="pe-1">
+		<a class="btn custom_bg_light_purple" href="{% url 'site_admin:mega_teams' %}">Teams</a>
+	</div>
+
+	<!-- <div class="btn-group pe-1">
+		<button type="button" class="btn custom_bg_light_purple  dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+	Teams</button>
+		<ul class="dropdown-menu py-0 bg-light">
+			
+			<li><a class="dropdown-item" href="{% url 'site_admin:mega_teams' %}">Mega Teams</a></li>  -->
+			<!-- <li><a class="dropdown-item" href="{% url 'site_admin:view_scheduled' 'Inactive' %}">Inactive Scheduled</a></li>	 -->
+			<!-- <li><a class="dropdown-item" href="{% url 'site_admin:view_scheduled' 'All' %}">All Scheduled Matches</a></li>	 -->
+			<!-- <li class="py-0"><hr class="dropdown-divider"></li> -->
+		      <!-- <li class="text-center pb-2">
+		        <a class=" btn btn-sm bg-success bg-gradient fw-bold" href="{% url 'site_admin:create_match' %}">
+		          Create Scheduled Match
+		        </a>
+		      </li> -->
+		<!-- </ul>
+	</div> -->
+	
+</div>
+
+
+
+

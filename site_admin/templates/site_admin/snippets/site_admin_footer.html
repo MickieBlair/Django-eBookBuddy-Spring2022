@@ -1,0 +1,33 @@
+ {% load static %}
+ {% load compress %}
+<!-- 
+<footer class="sticky-bottom bg-light">
+    <footer class="sticky-bottom mt-auto py-3 text-white bg-dark text-center">
+    <h6> <text>For assistance: <a href="mailto: admin@ebookbuddy.org">Email: admin@ebookbuddy.org</a></text>
+    </h6>
+</footer> -->
+
+  <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+{% compress js %}
+  <script src="{% static 'js/admin_site_scripts.js' %}" charset="utf-8"></script>
+
+{% endcompress %}
+
+ {% if load_cropperjs_scripts %}
+    <script type="module" src="{% static 'cropperjs/dist/cropper.min.js' %}"></script>
+    <script src="{% static 'js/crop_image_scripts.js' %}" charset="utf-8"></script>
+  {% endif %}
+
+<!-- <script src="{% static 'js/jqueryui/jqueryui.min.js' %}" charset="utf-8"></script> -->
+
+<!-- <script src="{% static 'js/jqueryuitouch/jquery.ui.touch-punch.min.js' %}" charset="utf-8"></script> -->
+  
+
+  

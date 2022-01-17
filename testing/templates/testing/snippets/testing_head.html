@@ -1,0 +1,48 @@
+ {% load static %}
+ {% load compress %}
+<head>
+
+
+    <!-- Required meta tags -->    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon-iphone-60x60.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'images/apple-touch-icon-ipad-76x76.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'images/apple-touch-icon-iphone-retina-120x120.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'images/apple-touch-icon-ipad-retina-152x152.png' %}">
+
+    <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
+
+    
+
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+     <!--  Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
+
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
+
+
+    {% compress css %}
+      <link rel="stylesheet" href="{% static 'css/testing_style-v1.css' %}" type="text/css" charset="utf-8">
+
+    {% endcompress %}
+
+    {% if load_cropperjs_scripts %}
+        <link rel="stylesheet" type="text/css" href="{% static 'cropperjs/dist/cropper.min.css' %}">
+    {% endif %}   
+    
+    <title>{{page_title}}</title>
+    
+</head>

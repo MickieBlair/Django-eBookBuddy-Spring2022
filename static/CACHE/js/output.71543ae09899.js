@@ -1,0 +1,9 @@
+const token=JSON.parse(document.getElementById('token').textContent);console.log("Token",token)
+const room_role=JSON.parse(document.getElementById('room_role').textContent);console.log("Role",role)
+const room_name_meeting=JSON.parse(document.getElementById('room_name').textContent);console.log("room_name_meeting",room_name_meeting)
+const domain="sessions.goebookbuddy.org";console.log("Domain",domain)
+let buttons=""
+let localRecoding_enabled=false;let fileRecordingsServiceEnabled=false;let fileRecordingsEnabled=false;if(role=="Staff"){localRecoding_enabled=true;fileRecordingsServiceEnabled=true;fileRecordingsEnabled:true;buttons=['microphone','camera','closedcaptions','desktop','fodeviceselection','recording','raisehand','videoquality','filmstrip','invite','stats','tileview','mute-everyone','mute-video-everyone',]}else{buttons=['microphone','camera','fodeviceselection','raisehand','videoquality','filmstrip','tileview','desktop',]}
+var options={roomName:room_name_meeting.replaceAll("_"," "),jwt:token,width:"100%",height:"100%",parentNode:document.querySelector('#meeting'),configOverwrite:{toolbarButtons:['chat','microphone','camera','closedcaptions','desktop','embedmeeting','fullscreen','fodeviceselection','profile','recording','livestreaming','etherpad','sharedvideo','shareaudio','settings','raisehand','videoquality','filmstrip','invite','feedback','stats','shortcuts','tileview','select-background','download','help','mute-everyone','mute-video-everyone','security','localrecording'],localRecording:{enabled:localRecoding_enabled,},fileRecordingsServiceEnabled:fileRecordingsServiceEnabled,fileRecordingsEnabled:fileRecordingsEnabled,startWithAudioMuted:true,startWithVideoMuted:true,},interfaceConfigOverwrite:{filmStripOnly:true}}
+console.error("Options",options)
+var api=new JitsiMeetExternalAPI(domain,options);;

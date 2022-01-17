@@ -1,0 +1,124 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+{% load users_extras %}
+
+{% block content %}
+<div class="fixed_height_registration">
+<div class="page_title_bar">
+  <div class="row  w-100">
+      <div class="col d-grid align-items-end">
+        <h3 class="m-0 p-0 page_h3">{{search_title}} User Session Logs - {{count}} </h3>
+      </div>
+      <div class="col d-flex justify-content-center align-items-end pe-5">
+<!--         <div class="d-inline-flex ">
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_teal btn-sm fixed_width_90px" href="{% url 'site_admin:view_users' 'All' %}">All</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_teal btn-sm fixed_width_90px" href="{% url 'site_admin:view_users' 'Staff' %}">Staff</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_teal btn-sm fixed_width_90px" href="{% url 'site_admin:view_users' 'Volunteer' %}">Volunteers</a>
+          </div>
+          <div class="pe-1">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm custom_bg_dark_teal  dropdown-toggle fixed_width_90px" data-bs-toggle="dropdown" aria-expanded="false">
+            Students</button>
+              <ul class="dropdown-menu py-0 bg-light">
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Student' %}">All Students</a></li>
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Matched' %}">Matched</a></li>
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Unmatched' %}">Unmatched</a></li> 
+              </ul>
+            </div>
+          </div>
+          
+          <div class="pe-1">
+            <div class="btn-group pe-1">
+              <button type="button" class="btn btn-sm custom_bg_dark_teal  dropdown-toggle fixed_width_90px" data-bs-toggle="dropdown" aria-expanded="false">
+            Readers</button>
+              <ul class="dropdown-menu py-0 bg-light">
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Reader' %}">All Readers</a></li>
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Open' %}">Open Slots</a></li>
+                <li><a class="dropdown-item" href="{% url 'site_admin:view_users' 'Full' %}">No Open</a></li> 
+              </ul>
+            </div>
+          </div>           
+        </div>  -->       
+      </div>      
+      <div class="col col-lg-3 p-0 d-inline-flex justify-content-end align-items-end">
+<!--         <form class="form-inline w-100" id="searchForm" method="GET">
+          <div class="d-inline-flex w-100">
+            <div class="flex-grow-1 pe-1">
+              <input class="form-control" type="text" placeholder="Search Users..." name="q" id="id_q"> 
+            </div>
+            <div class="">
+              <button type="submit" class="search_button"><i class="fas fa-search search_icon"></i></button>
+            </div>
+          
+        </div>      
+      </form> -->
+      </div>
+    </div>
+</div>
+
+<div class="stats_bar">
+  <div class="container-fluid my-3 border-top border-bottom bg-light">
+    <div class="row row-cols-5 gx-0 w-100">
+      <div class="col text-center">    
+          <h6 class="py-2 m-0">Logs = {{total_count}}</h6>            
+      </div>
+<!--       <div class="col text-center">
+        <h6 class="py-2 m-0">Staff = {{staff_count}}</h6>
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Volunteers = {{volunteer_count}}</h6>
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Students = {{student_count}}</h6>
+      </div>      
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Readers = {{reader_count}}</h6>
+      </div>  -->    
+    </div>
+  </div>
+</div>
+<div class="table-responsive scrolling_table_fixed_head">
+  <table class="table table_sm table-striped align-middle">
+    <thead class="fw-bold" >
+      <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>In</th>
+        <th>Out</th>
+      </tr>
+    </thead>
+    <tbody >
+
+    {% for log in logs %}
+      <tr>
+        <td>{{log.id}}</td>
+        <td>{{log.user.username}}</td>
+        <td>{{log.login_time}}</td>
+        <td>{{log.logout_time}}</td>
+        
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+
+
+</div>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+

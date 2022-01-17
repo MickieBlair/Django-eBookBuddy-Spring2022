@@ -1,0 +1,90 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="20" background="https://spring-2022-gobuddy.s3.amazonaws.com/static/images/pattern_triangle.png">
+
+<tr>
+
+<td>
+
+<p>
+
+<div style="text-align: center;">
+	<img src="https://spring-2022-gobuddy.s3.amazonaws.com/static/images/ebookbuddylogo.png">
+	<h2 style='text-align: center; color: #735383; background-color: #fff;'>
+		{{card_title}}
+	</h2>	
+</div>
+
+<div style="background-color: #f4fafb; padding: 16px; border: 1px solid #735383;">
+
+	<h3 style="padding-top:16px; padding-bottom:16px;"> Thank you for submitting your information.  </h3>
+	<div>
+		{% if count == 0 %}
+		<div style="padding-top:16px;font-family: Arial; font-weight:bold;">
+			We have not received any information on your children.
+		</div>
+
+		<div style="padding-top:16px;font-family: Arial; font-weight:bold;">
+			Please use the following link to register your child/children:		
+		</div>
+		<div>	
+			<a href="{{link}}"> 
+				Register your child/children
+			</a>
+		</div>
+
+		{% else %}
+		<div style="padding-top:16px;font-family: Arial; font-weight:bold;">
+			We have registrations on file for the following:
+		</div>
+
+		<div>
+			{% for child in registration.parent_info.all %}
+			<div>
+				{{child.child_first_name}} {{child.child_last_name}}
+			</div>		
+			{% endfor %}
+		</div>
+
+		<div style="padding-top:16px;font-family: Arial; font-weight:bold;">
+			Please use the following link to register additional child/children:		
+		</div>
+		<div>	
+			<a href="{{link}}"> 
+				{% if registration.registration_language.iso == "en" %}
+					{{register_another.message_content}}
+				{% else %}
+					{{register_another.span_content}}
+				{% endif %}
+
+			</a>
+		</div>
+
+		{% endif %}
+
+
+		
+
+	</div>
+
+				<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">If you need help with anything, absolutely reach out and I will more than happy to help! 🤗&nbsp;</span><a href="mailto:tails@ebookbuddy.org" style="text-decoration:none;"><span style="font-size:11pt;font-family:Arial;color:#1155cc;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:underline;-webkit-text-decoration-skip:none;text-decoration-skip-ink:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">tails@ebookbuddy.org</span></a></p>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">I look forward to hearing back from you!</span></p>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">My all best,</span>
+		<br>
+		<span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Tails Pineda</span>
+		<br>
+		<span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">eBookBuddy Staff</span></p>
+		<p><br></p>
+
+</div>	
+
+
+
+</p>
+
+</td>
+
+</tr>
+
+</table>
+
+
+

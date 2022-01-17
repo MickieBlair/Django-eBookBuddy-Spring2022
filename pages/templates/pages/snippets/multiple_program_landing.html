@@ -1,0 +1,63 @@
+
+
+
+<div class=" grid justify-content-center align-items-center p-3">
+	<div class="row">
+		<div class="col">
+			<div class="card">
+				<div class="card-header custom_bg_light_teal">
+					<h3>{{logged_in_user.full_name}}</h3>					
+				</div>
+				<div class="card-body">
+					<div class="row p-3">
+						{% if logged_in_user.is_superuser %}
+							<div class="col">
+								<div class="text-center">
+									<a class="btn btn-warning button_fixed_250" href="{% url 'admin:index' %}">Django Admin</a>
+								</div>
+							</div>
+							<div class="col">
+								<div class="text-center ">
+									<a class="btn btn-info button_fixed_250" href="{% url 'testing:testing_home' %}">Testing Home</a>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if logged_in_user.access_site_admin %}
+							<div class="col">
+								<div class="text-center">
+									<a class="btn btn-warning button_fixed_250" href="{% url 'site_admin:admin_home' %}">Site Admin</a>
+								</div>
+							</div>
+
+							{% endif %}
+					</div>
+
+					<div class="row p-3">
+						<div class="col">
+							<h3>Programs</h3>
+						<div class='ps-3'>
+						{% for program in programs %}
+						<ul class='m-0 p-0'>
+							<li>{{program}}
+								{% if program.program_status.updating %}
+								 - Updating
+								 {% else %}
+								 - Entry Allowed
+								 {% endif %}
+							</li>
+						</ul>
+							
+						{% endfor %}
+						</div>
+						</div>
+						
+					</div>
+
+
+				</div>
+			</div>			
+		</div>
+	</div>	
+</div>
+	

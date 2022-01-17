@@ -1,0 +1,129 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="fixed_height_registration">
+<div class="page_title_bar">
+	<div class="row  w-100">
+	    <div class="col d-grid align-items-end">
+	      <h3 class="m-0 p-0 page_h3">{{search_title}} Staff Registrations {% if search_title == "Matching" %} - {{count}} {% endif %}</h3>
+	    </div>
+	    <div class="col d-flex align-items-end">
+	    	<div class="d-inline-flex ">
+	    		<div class="pe-1">
+	    			<a class="btn custom_bg_dark_green btn-sm  fixed_width_125px " href="{% url 'site_admin:registrations_staff' 'All' %}">All</a>
+	    		</div>
+	    		<div class="pe-1">
+	    			<a class="btn custom_bg_dark_green btn-sm  fixed_width_125px " href="{% url 'site_admin:registrations_staff' 'Needs Username' %}">Needs Username</a>
+	    		</div>
+	    		
+	    		<div class="pe-1">
+	    			<a class="btn custom_bg_dark_green btn-sm  fixed_width_125px " href="{% url 'site_admin:registrations_staff' 'Has Username' %}">Has Username</a>
+	    		</div>
+	    		<!-- <div class="pe-1">
+	    			<a class="btn btn-warning btn-sm fixed_width_80px text-white" href="{% url 'site_admin:download_registrations_volunteers'%}"><i class="fas fa-download "></i></a>
+	    		</div> -->
+	    	</div>	      
+	    </div>	    
+	    <div class="col col-lg-3 p-0 d-inline-flex justify-content-end align-items-end">
+	    	<form class="form-inline w-100" id="searchForm" method="GET">
+	    		<div class="d-inline-flex w-100">
+	    			<div class="flex-grow-1 pe-1">
+	    				<input class="form-control" type="text" placeholder="Search Registrations..." name="q" id="id_q">	
+	    			</div>
+	    			<div class="">
+	    				<button type="submit" class="search_button"><i class="fas fa-search search_icon"></i></button>
+	    			</div>
+					
+				</div>			
+			</form>
+	    </div>
+  	</div>
+</div>
+
+<div class="stats_bar">
+	<div class="container-fluid my-3 border-top border-bottom bg-light">
+	  <div class="row row-cols-3 gx-0 w-100">
+	    <div class="col text-center">
+	    	<div class="d-inline-flex align-items-center">
+	    		<h6 class="py-2 m-0">Total Registrations = {{total_staff_registrations}}</h6>
+	    	</div>
+	    	
+	    </div>
+	    <div class="col text-center">
+	    	<h6 class="py-2 m-0">Needs Username = {{needs_username}}</h6>
+	    </div> 
+	    <div class="col text-center">
+	    	<h6 class="py-2 m-0">Has Username = {{has_username}}</h6>
+	    </div>    
+	  </div>
+	</div>
+</div>
+
+
+
+<div class="table-responsive page_table_div">
+	<table class="table table_xsm table-striped align-middle page_table">
+		<thead class="fw-bold table_header" >
+			<tr>
+				<td>ID</td>
+				<td>Date</td>
+				<td>Full Name</td>
+				<td>Age</td>
+				<td>Location</td>
+				<td>Gender</td>
+				<td>Email</td>
+				<td>Phone</td>				
+				<td></td>
+				<td class="text-center">Status</td>
+				{% if logged_in_user.is_superuser %}
+				<td>WS</td>
+				{% endif %}
+				
+
+				
+			</tr>
+		</thead>
+		<tbody class="table_body_rows">
+
+		{% for reg in regs %}
+			<tr >
+				<td>{{reg.id}}</td>
+				<td>{{reg.date_submitted}}</td>
+				<td>{{reg.full_name}} </text></td>
+				<td>{{reg.age}}</td>
+				<td>{{reg.location}}</td>
+				<td>{{reg.gender.letter}}</td>
+				<td><a href="mailto: {{reg.email}}">{{reg.email}}</a></td>
+				<td>{{reg.phone_format}}</td>
+				
+				<td><a class="btn btn_sm btn-warning" href="{% url 'site_admin:staff_review' reg.id %}">Review</a></td>
+				
+				<td class="text-center">				
+						{% if not reg.user %}
+							<a class="btn btn_sm btn-success text-white" href="{% url 'site_admin:create_staff' reg.id %}">Create User</a>
+						{% else %}
+							<text class="fw-bold">Username: <span class="fw-normal">{{reg.user.username}}</span></text>
+						{% endif %}				
+				</td>
+				{% if logged_in_user.is_superuser %}
+				<td>
+					{% for item in reg.staff_reg_ip.all %}  
+					{% if item.ws_connected %}  
+
+					<text>{{item.id}}: </text><i class="fas fa-check  match_check_green_lg"></i>
+					{% else %}
+					<text>{{item.id}}: </text><i class="fas fa-times match_times_red_lg"></i>
+					{% endif %}
+					{% endfor %}
+				</td>
+				{% endif %}
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div>
+</div>
+{% endblock content %}
+

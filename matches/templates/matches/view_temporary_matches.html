@@ -1,0 +1,111 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+{% load users_extras %}
+
+{% block content %}
+<div class="fixed_height_registration">
+<div class="page_title_bar">
+  <div class="row  w-100">
+      <div class="col d-grid align-items-end">
+        <h3 class="m-0 p-0 page_h3">{{match_type}} Temporary Matches {% if match_type == "Matching" %} - {{count}} {% endif %}</h3>
+      </div>
+      <div class="col d-flex justify-content-center align-items-end pe-5">
+        <div class="d-inline-flex ">
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_purple btn-sm fixed_width_90px text-white" href="{% url 'site_admin:view_temporary' 'All' %}">All</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_purple btn-sm fixed_width_90px text-white" href="{% url 'site_admin:view_temporary' 'Active' %}">Active</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_purple btn-sm fixed_width_90px text-white" href="{% url 'site_admin:view_temporary' 'Inactive' %}">Inactive</a>
+          </div>
+                  
+        </div>        
+      </div>      
+      <div class="col col-lg-3 p-0 d-inline-flex justify-content-end align-items-end">
+        <form class="form-inline w-100" id="searchForm" method="GET">
+          <div class="d-inline-flex w-100">
+            <div class="flex-grow-1 pe-1">
+              <input class="form-control" type="text" placeholder="Search Matches..." name="q" id="id_q"> 
+            </div>
+            <div class="">
+              <button type="submit" class="search_button"><i class="fas fa-search search_icon"></i></button>
+            </div>
+          
+        </div>      
+      </form>
+      </div>
+    </div>
+</div>
+
+<div class="stats_bar">
+  <div class="container-fluid my-3 border-top border-bottom bg-light">
+    <div class="row row-cols-3 gx-0 w-100">
+      <div class="col text-center">    
+          <h6 class="py-2 m-0">All = {{total_matches}}</h6>            
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Active = {{active_count}}</h6>
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Inactive = {{inactive_count}}</h6>
+      </div>    
+    </div>
+  </div>
+</div>
+<div class="table-responsive scrolling_table_fixed_head">
+  <table class="table table_sm table-striped align-middle">
+    <thead class="fw-bold" >
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Full Name</th>
+        <th>Roles</th>
+        <th>User Info</th>
+      </tr>
+    </thead>
+    <tbody >
+
+    {% for match in matches %}
+      <tr>
+        <td>{{match.id}}</td>
+        <td>{{member.username}}</td>
+        <td>{{member.full_name}}</td>
+        <td>
+          <ul class="p-0 m-0 list-unstyled">
+            {% for role in member.roles.all %}
+            <li><text class="font_12">{{role}}</text></li>
+            {% endfor %}
+          </ul>
+        </td>
+        <td>         
+            {% if member.staff_user %}
+            <a class="" href="{% url 'site_admin:staff_review' member.staff_user.id %}">View</a>
+            {% elif member.vol_user %}
+            <a class="" href="{% url 'site_admin:volunteer_review' member.vol_user.id %}">View</a>
+            {% elif member.student_user %}
+            <a class="" href="{% url 'site_admin:student_review' member.student_user.id %}">View</a>
+            {% endif %}
+        </td>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+
+
+</div>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+

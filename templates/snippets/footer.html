@@ -1,0 +1,110 @@
+ {% load static %}
+ {% load compress %}
+
+<footer class="sticky-bottom bg-light">
+    <div class="mx-auto container pt-3">
+       <div class="row">
+        <div class="col-sm text-center">
+          <p>Catalyst Coalition</p>
+          <p>3405 Duluth Pkwy LN NW</p>
+          <p>Duluth, GA 30096</p>
+        </div>
+        <div class="col-sm text-center">
+        	<div class="row">
+        		<a class="btn custom_bg_orange text-white rounded" id="contact" href="mailto:info@ebookbuddy.org">
+        			Email Us
+            	</a>
+        	</div>
+
+        	<div class="row text-center pt-3">
+        		<div class="col">
+        			<a href="https://www.facebook.com/Catalystcoalitionnonprofit" class="social_icon">
+                
+        				<i class="fab fa-facebook-f fa-lg"></i>
+        			</a>        			
+        		</div>
+        		<div class="col">
+        			<a href="https://www.instagram.com/catalyst_coalition_nonprofit/" class="social_icon">
+        				<i class="fab fa-instagram fa-lg"></i>
+        			</a>        			
+        		</div>
+        		<div class="col">
+        			<a href="https://youtube.com/" class="social_icon">
+        				<i class="fab fa-youtube fa-lg"></i>
+        			</a>        			
+        		</div>
+        		<div class="col">
+        			<a href="https://meet.google.com/uwn-kmye-xsb?hs=122&authuser=1" class="social_icon">
+        				<i class="fas fa-rss fa-lg"></i>
+        			</a>         			
+        		</div>      		
+        	</div>
+        </div>
+        <div class="col-sm text-center">
+          <p>www.catalystcoalition.org</p>
+          <p>info@ebookbuddy.org</p>
+          <p>404-512-2222</p>
+        </div>
+      </div>
+    </div> 
+  </footer>
+
+  <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+  
+
+
+{% compress js %}
+  <script src="{% static 'js/site_scripts.js' %}" charset="utf-8"></script>
+
+  {% if load_vol_registration_scripts %}
+    <script src="{% static 'js/vol_registration_scripts-v1.js' %}" charset="utf-8"></script>
+  {% endif %}
+
+  {% if load_vol_testing_scripts %}
+    <script src="{% static 'js/vol_testing_scripts.js' %}" charset="utf-8"></script>
+  {% endif %}
+
+   {% if load_parent_registration_scripts %}
+    <script src="{% static 'js/parent_registration_scripts-v1.js' %}" charset="utf-8"></script>
+  {% endif %}
+
+   {% if load_child_registration_scripts %}
+    <script src="{% static 'js/child_registration_scripts-v1.js' %}" charset="utf-8"></script>
+  {% endif %}
+
+   {% if load_staff_registration_scripts %}
+    <script src="{% static 'js/staff_registration_scripts.js' %}" charset="utf-8"></script>
+  {% endif %}
+
+  {% if file_upload_scripts %}
+    <script src="{% static 'js/file_upload.js' %}" charset="utf-8"></script>
+  {% endif %}
+
+{% endcompress %}
+
+
+
+ {% if load_cropperjs_scripts %}
+    <script type="module" src="{% static 'cropperjs/dist/cropper.min.js' %}"></script>
+    <script src="{% static 'js/crop_image_scripts.js' %}" charset="utf-8"></script>
+  {% endif %}
+
+  {% if load_registration_websocket %}
+    {% block registration_websocket_script %}
+      {% include 'registration/websocket/connect_registration_ws.html' %}
+    {% endblock registration_websocket_script %}
+  {% endif %}
+
+
+
+
+  
+
+  

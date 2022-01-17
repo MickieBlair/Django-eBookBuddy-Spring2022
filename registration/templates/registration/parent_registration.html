@@ -1,0 +1,478 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load parent_extras %}
+
+{% block content %}
+<div class="py-4">
+	<div class="card my-3">
+		<div class="card-header custom_bg_light_teal">
+			<div class="d-inline-flex w-100">
+				<div class="d-grid w-100 justify-content-center">
+					<div class="text-center">
+						<h3 class="m-0 p-0">
+						{% if active_programs.count == 1 %}
+						 {{form_language|active_semester_title}}
+						{% endif %}
+					</h3>
+					</div>
+					{% if active_programs.count == 1 %}
+					<div class="text-center" >
+						<div class="pt-2">
+							<h5 class="m-0 p-0">
+							 {{form_language|active_semester_dates}}
+							</h5>
+						</div>					
+					</div>
+					{% endif %}					
+				</div>				
+			</div>			
+		</div>
+		<div class="card-body ">
+			<form  method="post" id="parent_form" onsubmit="return false;">
+				{% csrf_token %}
+
+				{% for field in form %}
+					{% if field.name == "registration_language" %}
+						<div class="fieldWrapper bg-light border my-2 ps-3 py-1 w-100 d-none" id="fieldWrapper_{{field.name}}">
+							<div class="eng_text ">
+					    		<label>{{ field.label_tag }}</label>
+					    	</div>
+					    	<div>
+					    		{{field}}
+					    	</div>
+						</div>
+
+					{% elif field.name == "parent_first_name" %}
+						<div class="fieldWrapper bg-light border-top border-start border-end py-1 w-100" id="fieldWrapper_{{field.name}}">
+							<div class="pb-2">
+								{% if form_language == "en" %}
+									<text class="eng_color">{{contact.message_content|safe}}</text>					    	
+								{% else %}
+									<text class="eng_color">{{contact.span_content|safe}}</text>
+								{% endif %}
+							</div>
+
+							{% if form_language == "en" %} 
+								<div class="eng_color field_indent_3 fw-bold">
+									<label>{{ field.label_tag }}</label>
+								</div>
+							{% else %}
+								<div class="eng_color field_indent_3 fw-bold">
+								{% if field.help_text %}
+									<label class="help">{{ field.help_text|safe }}</label>
+								{% endif %}
+								</div>
+							{% endif %}
+
+							<div class="field_indent_3 errors text_center w-100 pe-3" id="{{field.name}}_errors">
+								{% for error in field.errors %}
+									<div class="alert alert-danger mb-1">
+										<strong>{{ error|escape }}</strong>
+									</div>
+								{% endfor %}
+							</div>
+
+							<div class="field_indent_3 w-100 pe-3">
+								{{field}}
+							</div>
+
+						</div>
+
+					{% elif field.name == "parent_last_name" or field.name == "email" or field.name == "phone" or field.name == "country" or field.name == "address" or field.name == "city" or field.name == "state" or field.name == "zip_code" or field.name == "county" %}
+
+						<div class="fieldWrapper bg-light border-start border-end py-1 w-100 {% if field.name == 'county' %} border-bottom {% endif %}" id="fieldWrapper_{{field.name}}">
+							{% if form_language == "en" %} 
+								<div class="eng_color field_indent_3 fw-bold">
+									<label>{{ field.label_tag }}</label>
+								</div>
+							{% else %}
+								<div class="eng_color field_indent_3 fw-bold">
+								{% if field.help_text %}
+									<label class="help">{{ field.help_text|safe }}</label>
+								{% endif %}
+								</div>
+							{% endif %}
+
+							<div class="field_indent_3 errors text_center w-100 pe-3" id="{{field.name}}_errors">
+								{% for error in field.errors %}
+									<div class="alert alert-danger mb-1">
+										<strong>{{ error|escape }}</strong>
+									</div>
+								{% endfor %}
+							</div>
+
+							<div class="field_indent_3 w-100 pe-3">
+								{{field}}
+							</div>
+						</div>
+
+					{% elif field.name == "session_choices" %}
+						<div class="fieldWrapper bg-light border my-2 py-1 w-100" id="fieldWrapper_{{field.name}}">
+
+							{% if field.name|question_number != "" %}
+								<div class="inline_grid_3 w-100 fw-bold {% if form_language == 'en' %} eng_color {% else %} eng_color{% endif %}">
+									<div class="fw-bold number_label_3">
+										<label class="pe-2"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+									</div>
+
+									{% if form_language == "en" %} 
+										<div class="eng_color fw-bold pe-3">
+											<label>{{ field.label_tag }}</label>
+										</div>
+									{% else %}
+										<div class="eng_color fw-bold pe-3">
+										{% if field.help_text %}
+											<label class="help">{{ field.help_text|safe }}</label>
+										{% endif %}
+										</div>
+									{% endif %}
+								</div>
+							{% endif %}
+							<div class="field_indent_3 errors text_center w-100 pe-3" id="{{field.name}}_errors">
+								{% for error in field.errors %}
+									<div class="alert alert-danger mb-1">
+										<strong>{{ error|escape }}</strong>
+									</div>
+								{% endfor %}
+							</div>
+
+							<div class="session_choices_table_div">
+								<div class="table-responsive pt-1">
+									<table class="table table-striped table_small align-middle">
+										<thead>
+											<tr>
+												<th></th>
+												{% for day in session_day_choices %}
+												<th id="day_choice-{{day.id}}" class='text-center' scope="column">
+													<div>
+														{% if form_language == "en" %} 
+														{{day.name}}
+														{% else %}
+														{{day.span_name}}
+														{% endif %}
+													</div>
+													<div class="fw-normal fst-italic">
+														{% if form_language == "en" %} 
+														{{day.desc}}
+														{% else %}
+														{{day.span_desc}}
+														{% endif %}
+													</div>
+												</th>
+												{% endfor %}
+											</tr>
+										</thead>
+										<tbody>
+											{% for time in session_time_choices %}
+											<tr>
+												<td class="table_choices_row_names">{{time}}</td>
+												{% for day in session_day_choices %}
+													<td id="day_time-{{day.id}}" class='text-center' scope="column">    			
+													{% for item in session_meeting_choices2 %}
+														{% if item.1.day_option == day and item.1.time_option == time%}
+														<div>
+															<input type="checkbox" name="{{field.name}}" value="{{item.1.id}}" class="registration_radio" onclick="clear_input_errors('{{field.name}}')" id="id_session_choices_{{item.0}}" {% if item.1 in cleaned_data_sessions %} checked {% endif %}>
+															</div> 
+															{% endif %} 
+														{% endfor %}
+												
+													</td>
+												{% endfor %}
+
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					{% elif field.name == "parent_can_help" %}
+					<div class="fieldWrapper bg-light border-top border-start border-end  py-1 w-100" id="fieldWrapper_{{field.name}}">
+						{% if field.name|question_number != "" %}
+							<div class="inline_grid_3 w-100 fw-bold {% if form_language == 'en' %} eng_color {% else %} eng_color{% endif %}">
+								<div class="fw-bold number_label_3">
+									<label class="pe-2"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+								</div>
+
+								{% if form_language == "en" %} 
+									<div class="eng_color fw-bold pe-3">
+										<label>{{ field.label_tag }}</label>
+									</div>
+								{% else %}
+									<div class="eng_color fw-bold pe-3">
+									{% if field.help_text %}
+										<label class="help">{{ field.help_text|safe }}</label>
+									{% endif %}
+									</div>
+								{% endif %}
+							</div>
+						{% endif %}
+						<div class="field_indent_3 errors text_center w-100 pe-3" id="{{field.name}}_errors">
+							{% for error in field.errors %}
+								<div class="alert alert-danger mb-1">
+									<strong>{{ error|escape }}</strong>
+								</div>
+							{% endfor %}
+						</div>
+
+						<div class="field_indent_3 w-100 pe-3">
+							{{field}}
+						</div>
+					</div>
+
+					{% elif field.name == "help_name" or field.name == "help_phone" or field.name == "help_relationship"%}
+					<div class="fieldWrapper bg-light border-start border-end py-1 w-100 {% if field.name == 'help_relationship' %} border-bottom {% endif %}" id="fieldWrapper_{{field.name}}">
+						{% if field.name == "help_name" %}
+							{% if form_language == "en" %} 
+								<div class="eng_color fw-bold field_indent_3 pe-3 pb-3">
+									<label><span class="text-danger">{{ field.name|question_required}}</span>{{ other_help.message_content|safe }}</label>
+								</div>
+							{% else %}
+								<div class="eng_color fw-bold field_indent_3 pe-3 pb-3">
+								{% if field.help_text %}
+									<label class="help"><span class="text-danger">{{ field.name|question_required}}</span>{{ other_help.span_content|safe }}</label>
+								{% endif %}
+								</div>
+							{% endif %}
+						{% endif %}
+
+						<div class="reference_fields field_indent_3 {% if form_language == 'en' %} eng_color {% else %} eng_color{% endif %}">
+							<div>
+								<div class="fixed_width_help fw-bold">
+									<label><span class="text-danger">{{ field.name|question_required}}</span>{{ field.label_tag }}</label>
+								</div>
+							</div>
+							<div class="flex_grow_1">
+								<div class="w-100 pe-3">
+									{{field}}
+								</div>
+							</div>
+						</div>
+						<div class="d-grid justify-content-center w-100">
+							<div class="errors text-center w-100" id="{{field.name}}_errors">
+							{% for error in field.errors %}
+								<div class="alert alert-danger px-3 py-0 mb-3 text-center ">
+									<strong>{{ error|escape }}</strong>
+								</div>
+							{% endfor %}
+							</div>
+						</div>
+
+					</div>
+					 {% elif field.name == 'additional_info' %}
+					<div class="fieldWrapper bg-light border my-2 py-1 w-100" id="fieldWrapper_{{field.name}}">
+						{% if field.name|question_number != "" %}
+							<div class="inline_grid_3 w-100 fw-bold {% if form_language == 'en' %} eng_color {% else %} eng_color{% endif %}">
+								<div class="fw-bold number_label_3">
+									<label class="pe-2"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+								</div>
+
+								{% if form_language == "en" %} 
+									<div class="eng_color fw-bold pe-3">
+										<label>{{ field.label_tag }}</label>
+									</div>
+								{% else %}
+									<div class="eng_color fw-bold pe-3">
+									{% if field.help_text %}
+										<label class="help">{{ field.help_text|safe }}</label>
+									{% endif %}
+									</div>
+								{% endif %}
+							</div>
+						{% endif %}
+
+				    	<div class="w-100 field_indent_3">
+				    		<ul id="id_additional_info" class="">
+				    			{% for item in additional_info_choices %}
+				    			<li class="pb-1">
+				    				<div class="additional_info_grid align-items-top">
+				    					<div class="">
+				    						<input type="checkbox" name="{{field.name}}" value="{{item.1.id}}" class="registration_radio2" onclick="clear_input_errors('{{field.name}}')" id="id_additional_info_{{item.0}}" {% if item.1 in cleaned_data_additional_info %} checked {% endif %}>
+										</div>
+										<div class="pe-3">
+											<label for="id_additional_info_{{item.0}}">
+												{% if form_language == "en" %} 
+													{{item.1.eng_text}}
+												{% else %}
+													{{item.1.span_text}}
+												{% endif %}
+											</label>				    						
+				    					</div>				    					
+				    				</div>				    			
+					    		</li>
+
+	    						{% endfor %}
+	    						</ul>
+				    	</div>
+
+
+			    	</div>
+
+			    	{% elif field.name == 'consent_liability_initials' or field.name == 'media_release_initials' %}
+			    	<div class="fieldWrapper bg-light border my-2 py-1 w-100 {% if field.name|indent_question %} field_indent {% else %} ps-3 {% endif %}" id="fieldWrapper_{{field.name}}"> 
+			    		{% if field.name|question_number != "" %}
+							<div class="inline_grid_3 w-100 fw-bold {% if form_language == 'en' %} eng_color {% else %} eng_color{% endif %}">
+								<div class="fw-bold number_label_3">
+									<label class="pe-2"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+								</div>
+
+								{% if form_language == "en" %} 
+									<div class="eng_color fw-bold pe-3">
+										<label>{{ field.label_tag }}</label>
+									</div>
+								{% else %}
+									<div class="eng_color fw-bold pe-3">
+									{% if field.help_text %}
+										<label class="help">{{ field.help_text|safe }}</label>
+									{% endif %}
+									</div>
+								{% endif %}
+							</div>
+						{% endif %}
+
+				    	<div class="field_indent_3 pt-3 fst-italic pe-3">
+				    		{% if form_language == "en" %} 
+						    	<div class="eng_color ">
+						    		{% if field.name == 'consent_liability_initials'%}
+						    			{{ consent_liability.message_content|safe }}
+						    		{% else %}
+						    			{{ media_release.message_content|safe }}
+						    		{% endif %}
+						    	</div>
+					    	{% else %}
+					    	 	<div class="eng_color ">
+					    	 		{% if field.name == 'consent_liability_initials'%}
+						    			{{ consent_liability.span_content|safe }} 		
+						    		{% else %}
+						    			{{ media_release.span_content|safe }}
+						    		{% endif %}
+					    		</div>
+					    	{% endif %}
+				    	</div>
+
+
+				    	<div class="errors text_center w-100 pe-3 field_indent_3" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        {% endfor %}
+				    	</div>				    	
+				    	<div class="w-100 pe-3 field_indent_3">
+				    		{{field}}
+				    	</div>
+
+				    	
+				        
+				        
+				    </div>
+					{% else %}
+						<div class="fieldWrapper bg-light border my-2 py-1 w-100" id="fieldWrapper_{{field.name}}">
+
+							{% if field.name|question_number != "" %}
+								<div class="inline_grid_3 w-100 fw-bold {% if form_language == 'en' %} eng_color {% else %} eng_color{% endif %}">
+									<div class="fw-bold number_label_3">
+										<label class="pe-2"><span class="text-danger">{{ field.name|question_required}}</span>{{ field.name|question_number}}</label>
+									</div>
+
+									{% if form_language == "en" %} 
+										<div class="eng_color fw-bold pe-3">
+											<label>{{ field.label_tag }}</label>
+										</div>
+									{% else %}
+										<div class="eng_color fw-bold pe-3">
+										{% if field.help_text %}
+											<label class="help">{{ field.help_text|safe }}</label>
+										{% endif %}
+										</div>
+									{% endif %}
+								</div>
+							{% endif %}
+							<div class="field_indent_3 errors text_center w-100 pe-3" id="{{field.name}}_errors">
+								{% for error in field.errors %}
+									<div class="alert alert-danger mb-1">
+										<strong>{{ error|escape }}</strong>
+									</div>
+								{% endfor %}
+							</div>
+
+							<div class="field_indent_3 w-100 pe-3">
+								{{field}}
+							</div>
+						</div>
+
+					{% endif %}
+
+				{% endfor %}
+			</form>
+			<div class="pt-3 text-center">
+				<button class="btn btn-lg custom_bg_muted_green text-white" onclick="submit_parent_form()">
+					{% if form_language == "en" %} 
+						{{button_text.message_content}}
+					{% else %}
+						{{button_text.span_content}}
+					{% endif %}					
+				</button>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<!-- Button trigger modal -->
+<button id="notifyModalButton" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#notifyModal">  
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="notifyModal" tabindex="-1" aria-labelledby="notifyModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header custom_bg_light_teal">
+		        <h5 class="modal-title" id="notifyModalLabel">{% if form_language == "en" %} 
+								Registration Notification
+							{% else %}
+								Notificación de registro
+							{% endif %}	</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+      	{% if form_language == "en" %} 
+			<div class="w-100 p-3 " id="parent_email">
+		        <p> The email you entered is already in our system with a completed application.  Please check your email spam folders for emails from eBookBuddy.  The email will contain information on the next steps as well a link to register additional children.</p>
+
+		        <p>If you did not complete an application or need the link again to register additional children, please email the following:</p>
+		        <text> <a href="mailto: info@ebookbuddy.org">Email: info@ebookbuddy.org</a></text>
+
+		        
+		       </div>
+		       
+		      </div>
+		{% else %}
+			<div class="w-100 p-3 " id="parent_email">
+		        <p> El correo electrónico que ingresó ya está en nuestro sistema con una solicitud completa. Revise sus carpetas de correo no deseado para ver si hay correos electrónicos de eBookBuddy. El correo electrónico contendrá información sobre los próximos pasos, así como un enlace para registrar niños adicionales.</p>
+
+		        <p>Si no completó una solicitud o necesita el enlace nuevamente para registrar niños adicionales, envíe un correo electrónico a lo siguiente:</p>
+		        <text> <a href="mailto: info@ebookbuddy.org">Email: info@ebookbuddy.org</a></text>
+		       </div>
+		       
+		      </div>
+		{% endif %}
+		<div class="modal-footer bg-white">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>    
+	      </div> 
+	</div>
+	
+
+
+			
+		</div>
+	</div>
+</div>
+
+ 
+
+
+
+	
+{% endblock content %}

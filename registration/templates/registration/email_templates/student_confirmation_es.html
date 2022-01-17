@@ -1,0 +1,98 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="20" background="https://spring-2022-gobuddy.s3.amazonaws.com/static/images/pattern_triangle.png">
+<tr>
+<td>
+<p>
+	<div style="text-align: center;">
+		<img src="https://spring-2022-gobuddy.s3.amazonaws.com/static/images/ebookbuddylogo.png">
+		<h2 style='text-align: center; color: #735383; background-color: #fff;'>
+			eBookBuddy | Estudiante Confirmación - ¡Está registrado!
+		</h2>	
+	</div>
+
+	<div style="background-color: #f4fafb; padding: 16px; border: 1px solid #735383;">
+	
+		<h2 style='text-align: center; color: #735383;'>
+			¡Estamos muy emocionados y felices de que haya decidido unirse a nosotros! ¡Bienvenido!    🥳
+		</h2>
+		
+		<div>
+			<p style="font-weight: bold;">
+				{% if registration.registration_language.iso == "en" %}
+					{{child_list.message_content}}
+				{% else %}
+					{{child_list.span_content}}
+				{% endif %}
+			</p>
+
+			<div>
+				{% for child in registration.parent_info.all %}
+				<div>
+					{{child.child_first_name}} {{child.child_last_name}}
+				</div>		
+				{% endfor %}
+			</div>
+		</div>
+
+		<h3>
+			{% if registration.registration_language.iso == "en" %}
+				{{text_link.message_content}}
+			{% else %}
+				{{text_link.span_content}}
+			{% endif %}
+		</h3>
+
+		<div>	
+			<a href={{link}}> 
+				{% if registration.registration_language.iso == "en" %}
+					{{register_another.message_content}}
+				{% else %}
+					{{register_another.span_content}}
+				{% endif %}
+
+			</a>
+		</div>
+
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><br></p>
+		
+		<hr>
+		<p><span style="font-size:14pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">&iexcl;LEA TODO LO SIGUIENTE, POR FAVOR!</span></p>
+
+		<hr>
+
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">🟡 &iexcl;Mi nombre es Tails! ☺️ &iexcl;&iexcl;Encantada de conocerte!! Yo voy a ser quien le ayude a guiar a trav&eacute;s de nuestro programa. Si tiene preguntas, comentarios o cualquier otra cosa, &iexcl;soy yo a quien puede contactar! &iexcl;Mis puertas est&aacute;n siempre abiertas y estar&eacute; m&aacute;s que feliz de poder ayudarle con lo que necesite! 💕</span></p>
+
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">🟡 ¡Las sesiones de lectura comenzarán el 15 de febrero de 2022! Tendremos una breve orientación obligatoria la semana previa. Durante esta sesión, lo ayudaremos a usted y a su hijo a navegar el programa y nos aseguraremos de la cámara y el micrófono funcionen. </span></p>
+
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">🟡 Nos comunicaremos a trav&eacute;s de WhatsApp - &iexcl;All&iacute; le enviar&eacute;: recordatorios, detalles importantes, actualizaciones y algunos otros puntos! (&iexcl;No se preocupes, es un canal, as&iacute; que nada de spam!)</span></p>
+		<hr>
+
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Ahora, algunos PASOS DE ACCI&Oacute;N QUE DEBE HACER AHORA MISMO para confirmar su lugar en nuestro Programa eBookBuddy:</span></p>
+
+			
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">✅ Si a&uacute;n no tiene WhatsApp, descargue la aplicaci&oacute;n y cree su cuenta.</span></p>
+		
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">✅ &iexcl;Luego, haga clic en este enlace y le llevar&aacute; a enviarme un mensaje! - Esto confirmar&aacute; su lugar en nuestro programa eBookBuddy.</span></p>
+		<p><a href="https://wa.me/50488976195?text=%C2%A1%C2%A1Hola,%20Tails!!%20%C2%A1Acabo%20de%20registrarme%20para%20el%20Programa%20de%20Primavera%20de%20eBookBuddy!%20%F0%9F%8C%B8%F0%9F%93%9A%20%C2%A1Por%20favor,%20dime%20los%20siguientes%20pasos!%20" style="text-decoration:none;"><span style="font-size:11pt;font-family:Arial;color:#1155cc;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:underline;-webkit-text-decoration-skip:none;text-decoration-skip-ink:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">¡Haga clic aquí para unirse!</span></a></p>
+		
+		<hr>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">&iexcl;Eso es todo por ahora!</span></p>
+		
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">⚠️ &iexcl;Por favor, HAGA esos 2 pasos para que pueda confirmar su lugar en nuestro programa! - Si no se hacen, entonces no se puede proceder a tener las sesiones.</span></p>
+		
+		<hr>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Si necesita ayuda en cualquier cosa, comun&iacute;quese conmigo y estar&eacute; m&aacute;s que feliz de ayudarle. 🤗&nbsp;</span><a href="mailto:tails@ebookbuddy.org" style="text-decoration:none;"><span style="font-size:11pt;font-family:Arial;color:#1155cc;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:underline;-webkit-text-decoration-skip:none;text-decoration-skip-ink:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">tails@ebookbuddy.org</span></a></p>
+		
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">&iexcl;Espero saber de usted pronto!</span></p>
+		
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Todo lo mejor,</span>
+		<br>
+		<span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Tails Pineda</span>
+		<br>
+		<span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">eBookBuddy Staff</span></p>
+		<p><br></p>
+
+</p>
+</td>
+</tr>
+</table>
+

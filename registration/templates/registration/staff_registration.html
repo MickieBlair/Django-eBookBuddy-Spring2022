@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="py-4">
+
+	<div class="card my-3">
+		<div class="card-header custom_bg_light_teal">
+			<div class="d-grid w-100 justify-content-center">
+				<div class="text-center">
+					<h3 class="m-0 p-0">Staff Registration
+					{% if active_programs.count == 1 %}
+					 - {{active_programs.first.program}} - {{active_programs.first.name}}
+					{% endif %}
+				</h3>
+				</div>
+				{% if active_programs.count == 1 %}
+				<div class="text-center" >
+					<div class="pt-2">
+						<h5 class="m-0 p-0">
+						Session Dates: {{active_programs.first.start_date}} - {{active_programs.first.end_date}}
+						</h5>
+					</div>					
+				</div>
+				{% endif %}					
+			</div>			
+		</div>
+		<div class="card-body ">
+			<form enctype="multipart/form-data" method="post" id="staff_registration_form" onsubmit="return false;">
+				{% csrf_token %}
+			    {% for field in form %}    	
+
+			    	{% if field.name == "profile_image" %}
+			    	<div class="fieldWrapper bg-light border my-2  py-1 w-100" id="fieldWrapper_{{field.name}}">
+				    	<div class="inline_grid  w-100">
+				    		
+			    			<div class="pe-2 fw-bold number_label field_indent">
+			    				<label class="eng_text"><span class="text-danger"></span></label>
+			    			</div>
+			    			
+			    			<div class="eng_text">
+			    				<label>{{ field.label_tag }}</label>
+			    			</div>
+			    					    			
+			    		</div>
+			    		<div class="errors text_center w-100 pe-3 field_indent" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        {% endfor %}
+				    	</div>
+				    	<div class="d-none">
+				    		<div class="row">
+				    			<div class='col'>
+				    				<div class="d-inline-flex">
+				    					<label class="pe-3">X</label><input type="text" name="cropX" id="id_cropX">
+				    				</div>				    				
+				    			</div>
+				    			<div class='col'>
+				    				<div class="d-inline-flex">
+				    					<label class="pe-3">Y</label><input type="text" name="cropY" id="id_cropY">
+				    				</div>
+				    			</div>
+				    			<div class='col'>
+				    				<div class="d-inline-flex">
+				    					<label class="pe-3">W</label><input type="text" name="cropW" id="id_cropW">
+				    				</div>
+				    			</div>
+				    			<div class='col'>
+				    				<div class="d-inline-flex">
+				    					<label class="pe-3">H</label><input type="text" name="cropH" id="id_cropH">
+				    				</div>
+				    			</div>				    			
+				    		</div>
+				    		<div class="row">
+				    			<textarea name="imageString" id="id_image_string"></textarea>  			
+				    		</div>
+				    		
+
+
+				    	</div>
+				    	<div class="d-grid justify-content-center align-items-center w-100">
+				    		<div class="image_div">
+				    			<img class="crop_image" src="" id="id_profile_image_display"> 	
+				    		</div>
+
+				    			
+				    	</div>
+				    	<div class="d-grid justify-content-center align-items-center">
+				    		<div class="w-100 pe-3 image_div text-center pt-2">
+				    		{{field}}
+				    	</div>
+				    	</div>
+
+				    	
+				    </div>
+			    		
+
+			    	{% else %}
+			    	<div class="fieldWrapper bg-light border my-2 py-1 w-100 " id="fieldWrapper_{{field.name}}"> 
+				    	
+
+				    	<div class="eng_text field_indent">
+				    		<label>{{ field.label_tag }}</label>
+				    	</div>
+
+				 
+				    	<div class="errors text_center w-100 pe-3 field_indent" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        {% endfor %}
+				    	</div>				    	
+				    	<div class="w-100 pe-3 field_indent">
+				    		{{field}}
+				    	</div>
+
+				        
+				    </div>
+
+			    	{% endif %}
+
+			    {% endfor %}
+			</form>
+			<div class="pt-3 text-center">
+					<button class="btn btn-lg custom_bg_muted_green text-white" onclick="submit_staff_reg_form()">Submit Registration</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<!-- Button trigger modal -->
+<button id="notifyModalButton" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#notifyModal">  
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="notifyModal" tabindex="-1" aria-labelledby="notifyModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header custom_bg_light_teal">
+		        <h5 class="modal-title" id="notifyModalLabel">
+								Registration Notification
+								</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+			<div class="w-100 p-3 " id="staff_email">
+		        <p> The email you entered is already in our system.</p>		   
+		        <p>Please send us a quick email to see if we can find your account.</p>
+		       <text> <a href="mailto: admin@ebookbuddy.org">Email: admin@ebookbuddy.org</a></text>
+		       
+		       </div>
+
+
+		      </div>
+		
+		<div class="modal-footer bg-white">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="close_notify_modal()">Close</button>    
+	      </div> 
+	</div>
+	
+
+
+			
+		</div>
+	</div>
+</div>
+
+{{ DATA_UPLOAD_MAX_MEMORY_SIZE|json_script:"max_upload_size" }}	
+
+	
+	
+{% endblock content %}

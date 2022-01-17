@@ -1,0 +1,27 @@
+	<div>
+		
+	</div>
+
+	<button class="btn btn-danger button_bottom_toolbar btn-sm black_font" onclick='location.href="{% url 'reading_sessions:session_end' %}";' type="button">
+         End Session</button>
+
+	<button class="btn btn-dark btn-sm close_full_screen" onclick="close_full_screen()" id="close_full_screen">
+		<div class="d-inline-flex justify-content-center align-items-center">
+			<i class="fas fas fa-compress-arrows-alt icon25px"></i>
+			<div class="ps-2 d-flex justify-content-center align-items-center">
+				Exit Full Screen
+			</div>
+		</div>
+	</button>
+	
+
+	<button class="btn btn-dark btn-sm open_full_screen h-100" onclick="open_full_screen()" id="open_full_screen">
+			<div class="d-inline-flex justify-content-center align-items-center  h-100">
+				<i class="fas fa-expand-arrows-alt icon25px"></i>
+				<div class="ps-2 d-flex justify-content-center align-items-center">
+					Full Screen
+				</div>
+		</div>
+	</button>
+	
+

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="py-4 d-grid justify-content-center align-items-center h-100">
+	<div class="card">
+		<div class="card-header custom_bg_light_teal text-center">
+			
+			<div class="d-grid justify-content-center align-items-center w-100">
+				<div class="w-100 text-center">
+					<h3 class="m-0 p-1">
+						{% if parent_registration.registration_language.iso == "en" %}
+							{{card_title.message_content}}
+						{% else %}
+							{{card_title.span_content}}
+						{% endif %}
+					</h3>
+				</div>			
+			</div>
+			
+		</div>
+		<div class="card-body ">
+			<div class="w-100 text-center">
+				<h5 class="m-0 p-1">
+					{% if parent_registration.registration_language.iso == "en" %}
+						{{check_email.message_content}}
+					{% else %}
+						{{check_email.span_content}}
+					{% endif %}
+				</h5>
+			</div>
+
+			<div class="w-100 text-center p-3">
+				<text class="fw-bold w-100">
+					{% if parent_registration.registration_language.iso == "en" %}
+						{{child_list.message_content}}
+					{% else %}
+						{{child_list.span_content}}
+					{% endif %}
+					</text>
+				<div class="py-3">
+					{% for child in parent_registration.parent_info.all %}
+					<div>
+						{{child.child_first_name}} {{child.child_last_name}}
+					</div>					
+					{% endfor %}
+				</div>
+
+				<div class="p-3">
+					<a class="btn btn-primary" href="{% url 'registration:student_registration' form_language=form_language parent_id=parent_registration.id %}">
+						
+						{% if parent_registration.registration_language.iso == "en" %}
+							{{register_another.message_content}}
+						{% else %}
+							{{register_another.span_content}}
+						{% endif %}
+					</a>
+				</div>
+					
+			</div>
+			
+		</div>
+		
+	</div>
+	
+</div>
+	
+{% endblock content %}

@@ -1,0 +1,211 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+{% load registration_extras %}
+
+{% block content %}
+<div class="fixed_height_registration">
+<div class="page_title_bar">
+	<div class="row  w-100">
+	    <div class="col d-grid align-items-end">
+	      <h3 class="m-0 p-0 page_h3">{{search_title}} Student Registrations {% if search_title == "Matching" %} - {{count}} {% endif %}</h3>
+	    </div>
+	    <div class="col d-flex align-items-end">
+	    	<div class="d-inline-flex ">
+	    		<div class="pe-1">
+	    			<a class="btn custom_bg_dark_green btn-sm fixed_width_80px" href="{% url 'site_admin:registrations_students' 'All' %}">All</a>
+	    		</div>
+	    		<div class="pe-1">
+	    			<a class="btn custom_bg_dark_green btn-sm fixed_width_80px" href="{% url 'site_admin:registrations_students' 'Pending' %}">Pending</a>
+	    		</div>
+	    		<div class="pe-1">
+	    			<a class="btn custom_bg_dark_green btn-sm fixed_width_80px" href="{% url 'site_admin:registrations_students' 'Approved' %}">Approved</a>
+	    		</div>
+	    		<div class="pe-1">
+	    			<a class="btn custom_bg_dark_green btn-sm fixed_width_80px" href="{% url 'site_admin:registrations_students' 'Waitlist' %}">Waitlist</a>
+	    		</div>
+	    		<div class="pe-1">
+	    			<a class="btn btn-warning btn-sm fixed_width_80px text-white" href="{% url 'site_admin:download_registrations_studentss'%}"><i class="fas fa-download "></i></a>
+	    		</div>
+	    	</div>	      
+	    </div>	    
+	    <div class="col col-lg-3 p-0 d-inline-flex justify-content-end align-items-end">
+	    	<form class="form-inline w-100" id="searchForm" method="GET">
+	    		<div class="d-inline-flex w-100">
+	    			<div class="flex-grow-1 pe-1">
+	    				<input class="form-control" type="text" placeholder="Search Registrations..." name="q" id="id_q">	
+	    			</div>
+	    			<div class="">
+	    				<button type="submit" class="search_button"><i class="fas fa-search search_icon"></i></button>
+	    			</div>
+					
+				</div>			
+			</form>
+	    </div>
+  	</div>
+</div>
+
+<div class="stats_bar">
+	<div class="container-fluid my-3 border-top border-bottom bg-light">
+	  <div class="row row-cols-4 gx-0 w-100">
+	    <div class="col text-center">
+	    	<h6 class="py-2 m-0">Total Registrations = {{total_stu_registrations}}</h6>
+	    </div>
+	    <div class="col text-center">
+	    	<h6 class="py-2 m-0">Total Pending = {{stu_pending_count}}</h6>
+	    </div>
+	    <div class="col text-center">
+	    	<h6 class="py-2 m-0">Total Approved = {{stu_approved_count}}</h6>
+	    </div> 
+	    <div class="col text-center">
+	    	<h6 class="py-2 m-0">Total Waitlist = {{stu_waitlist_count}}</h6>
+	    </div>    
+	  </div>
+	</div>
+</div>
+
+
+
+<div class="table-responsive scrolling_table_fixed_head">
+	<table class="table table-sm table-striped align-middle">
+		<thead class="fw-bold" >
+			<tr>
+				<th>ID</th>
+				<th>Date</th>
+				<th>Full Name</th>
+				<th>Parent</th>
+				<th>Gender/Age</th>	
+				<th>School/Grade </th>				
+				<th>Email/Phone</th>
+				
+				
+				<th></th>			
+				<th>Checklist</th>
+				<th class="text-center">Tech</th>
+				<th class="text-center">Status</th>
+				{% if logged_in_user.is_superuser %}
+				<th>WS Parent</th>
+				{% endif %}
+				
+
+				
+			</tr>
+		</thead>
+		<tbody class="">
+
+		{% for reg in regs %}
+			<tr {% if reg.student_registration_status.waitlist %} class= 'bg_muted_red' {% endif %}>
+				<td>{{reg.id}}</td>
+				<td>{{reg.date_created}}</td>
+				<td>{{reg.full_name}}</td>
+				<td>{{reg.parent.full_name}}</td>
+				<td>{{reg.gender.letter}} - {{reg.age}}</td>				
+				<td>
+					<div>
+						{{reg.get_school}}
+					</div>
+					<div>
+						{{reg.current_grade.abbr}}
+					</div>					
+				</td>
+				
+				<td>
+					<div>
+						<a href="mailto: {{reg.parent.email}}">{{reg.parent.email}}</a>	
+					</div>
+					<div>
+						{{reg.parent.phone_format}}
+					</div>
+					
+				</td>
+				
+
+				
+				<td><a class="btn btn_sm btn-warning" href="{% url 'site_admin:student_review' reg.id %}">Review</a></td>
+				
+				<td class="fixed_width_125px">
+					<div class="font_12 d-inline-flex w-100 align-items-center">
+						<div class="fixed_width_80px">Responsive: </div>
+						<div>
+							{% if reg.student_registration_status.responsive %} 
+							<i class="fas fa-check  match_check_green"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red"></i>
+							{% endif %}	
+						</div>									
+					</div>
+					<div class="font_12 d-inline-flex w-100 align-items-center">
+						<div class="fixed_width_80px">Assigned: </div>
+						<div>
+							{% if reg.user %}
+							{% if reg.user.student_match_profile.match_needed %}
+							<i class="fas fa-times match_times_red"></i> 
+							
+							{% else %} 
+							 <i class="fas fa-check  match_check_green"></i>
+							 {% endif %}
+							
+							{% else %}
+							<i class="fas fa-times match_times_red"></i>						
+							{% endif %}
+							
+						</div>									
+					</div>
+					<div class="font_12 d-inline-flex w-100 align-items-center">
+						<div class="fixed_width_80px">Confirmed: </div>
+						<div>
+							{% if reg.student_registration_status.confirm %} 
+							<i class="fas fa-check  match_check_green"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red"></i>
+							{% endif %}	
+						</div>									
+					</div>
+					{% if not reg.student_registration_status.responsive %} 
+					<div>
+						<a class="btn btn_sm btn-info font_12" href="{% url 'site_admin:whatsapp_email' reg.parent.id %}">WhatsApp Email-{{reg.parent|whatsapp_email_reminder}}</a>	
+					</div>
+					{% endif %}	
+					
+					
+
+				</td>
+				<td class="text-center font_12">
+					<div>
+						{{reg.student_registration_status.tech_screening}} 
+					</div>			
+				</td>
+				<td class="text-center">
+					<div>
+						{{reg.status}}
+					</div>
+					{% if reg.status == "Approved" %}
+						{% if not reg.user %}
+							<a class="btn btn_sm btn-success text-white" href="{% url 'site_admin:create_student' reg.id %}">Create User</a>
+						{% else %}
+							<text class="fw-bold">Username: <span class="fw-normal">{{reg.user.username}}</span></text>
+						{% endif %}
+					{% endif %}
+				
+				</td>
+				{% if logged_in_user.is_superuser %}
+				<td>
+					{% for item in reg.parent.parent_reg_ip.all %}  
+					{% if item.ws_connected %}  
+
+					<text>{{item.id}}: </text><i class="fas fa-check  match_check_green_lg"></i>
+					{% else %}
+					<text>{{item.id}}: </text><i class="fas fa-times match_times_red_lg"></i>
+					{% endif %}
+					{% endfor %}
+				</td>
+				{% endif %}
+				
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div>
+</div>
+{% endblock content %}
+

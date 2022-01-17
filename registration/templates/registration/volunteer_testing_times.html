@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+	<div class="grid justify-content-center align-items-center p-5">
+		<div class="card p-3">
+			<div class="card-header custom_bg_light_teal text-center">
+				<h3 class="m-0 p-2"> Device and Internet Testing</h3>
+				
+			</div>
+			<div class="card-body text-center">
+				<div class="w-100 d-flex justify-content-end">
+						<div>
+							<h6 class="m-0 p-0 text-center">{{todays_date}}</h6>
+							<h6 class="m-0 p-0 text-center" id="server_clock"></h6>	
+						</div>			
+					</div>
+				<h5 class="m-0 p-2 text-decoration-underline">The Meeting Server will be open for testing: </h5>
+				<div class="d-flex justify-content-center w-100">
+					<div>
+						<ul class="text-start">
+							{% for time in server_times %}
+							<li>
+							<span class="fw-bold">{{time}}</span>, {{time.day}}: {{time.start_time}} - {{time.end_time}}
+							</li>						
+							{% endfor %}
+						</ul>
+					</div>					
+				</div>
+				<div class="p-3 border bg-light {% if display_form %} d-none {% endif %}">
+
+					<h3>The server is currently closed.</h3>
+					<h4>The page will refresh, once the server is open.</h4>
+					
+				</div>
+
+				<div class="pt-3 {% if not display_form %} d-none {% endif %}">
+					<form method="post" id="volunteer_video_form" >
+						{% csrf_token %}
+					    {% for field in form %}
+				    	{% if field.name == 'registration' %}
+					    	<div class="fieldWrapper bg-light border my-2 py-1 w-100 d-none" id="manual_fieldWrapper_{{field.name}}">
+					    		<div class="inline_grid w-100 field_indent">
+						    		<div class="flex-grow-1 eng_text">
+					    				<label>{{ field.label_tag }}</label>
+					    			</div>				    					    			
+					    		</div>
+						    	<div class="errors text_center w-100 pe-3 field_indent" id="{{field.name}}_errors">
+						    		{% for error in field.errors %}
+							            <div class="alert alert-danger mb-1">
+							                <strong>{{ error|escape }}</strong>
+							            </div>
+							        {% endfor %}
+						    	</div>
+						    	<div class="w-100 pe-3 field_indent">
+						    		{{field}}
+						    	</div>
+					    	</div>
+					    
+
+					    {% else %}
+					    	<div class="fieldWrapper bg-light border my-2 py-1 w-100 px-5"> 
+	
+						    			    			
+				    			<div class="eng_text text-center px-3">
+				    				<label>{{ field.label_tag }}</label>
+				    			</div>	
+
+						    	<div class="errors text_center w-100 px-3 " id="{{field.name}}_errors">
+						    		{% for error in field.errors %}
+							            <div class="alert alert-danger mb-1">
+							                <strong id="{{field.name}}_error_text">{{ error|escape }}</strong>
+							            </div>
+							        {% endfor %}
+						    	</div>				    	
+						    	<div class="w-100 px-3 pb-3">
+						    		{{field}}
+						    	</div>				    					        
+						        
+						    </div>
+
+					    	{% endif %}
+
+					    {% endfor %}
+					    <div class="pt-2 text-center" id="submit_btn_div">
+							<button class="btn btn-lg custom_bg_muted_green text-white" type="submit" id="submit">Join The Testing Room</button>
+						</div>
+					</form>
+					
+				</div>
+
+				
+								
+			</div>			
+		</div>
+		
+	</div>
+{{ offset|json_script:"offset" }}
+{{ server_open_today|json_script:"server_open_today" }}
+{{ today_time_start|json_script:"entry_start" }}
+{{ today_time_end|json_script:"entry_end" }}
+
+{% endblock content %}
+

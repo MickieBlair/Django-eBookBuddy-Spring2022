@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load parent_extras %}
+
+{% block content %}
+<div class="py-4 d-grid justify-content-center align-items-center h-100">
+	<div class="card">
+		<div class="card-header custom_bg_light_teal text-center">
+			
+			<div class="d-grid justify-content-center align-items-center w-100">
+				<div class="w-100 text-center">
+					<h3 class="m-0 p-1">
+						{{card_title.message_content}}
+					</h3>
+				</div>
+				<div class="w-100 text-center">
+					<h3 class="m-0 p-1">
+						{{card_title.span_content}}
+					</h3>
+				</div>				
+			</div>
+			
+		</div>
+		<div class="card-body ">
+
+
+			<div class="row g-0 w-100 text-center">
+				{% for lang in languages %}
+					<div class="col p-3 d-grid justify-content-center">
+						<button class="btn btn-lg text-white{% if lang.iso == 'en' %} eng_bg {% else %} span_bg  {% endif %} min_height_115" onclick="set_form_language('{{lang.id}}')">{{lang.iso|button_text}}</button>					
+					</div>
+				{% endfor %}				
+			</div>
+			<div class="d-none">
+				<form  method="post" id="pre_form">
+
+			    {% csrf_token %}
+			
+			    {% for field in form %}
+
+				    <div class="fieldWrapper bg-light border my-2 ps-3 py-1 w-100">
+				    	<div class="eng_text ">
+				    		<label>{{ field.label_tag }}</label>
+				    	</div>
+				    	<div class="span_text ">
+				    		{% if field.help_text %}
+				        		<label class="help">{{ field.help_text|safe }}</label>
+				        	{% endif %}
+				    	</div>
+				    	<div class="errors text_center w-100 pe-3" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        {% endfor %}
+				    	</div>				    	
+				    	<div class="w-100 pe-3">
+				    		{{field}}
+				    	</div>
+				        
+				        
+				    </div>
+				{% endfor %}
+			    
+			</form>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+</div>
+
+
+
+	
+	
+{% endblock content %}

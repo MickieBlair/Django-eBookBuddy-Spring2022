@@ -1,0 +1,125 @@
+<div class="modal fade" id="manual_match_Modal" tabindex="-1" aria-labelledby="manual_match_Modal_Label" aria-hidden="true" >
+  <div class="modal-dialog modal-fullscreen p-5">
+    <div class="modal-content">
+      <div class="modal-header custom_bg_light_teal p-2 text-center">
+        <h3 class="modal-title w-100" id="manual_match_Modal_Label">Manually Create Match - {{day_with_session}}</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="close_create_manual_match()"></button>
+      </div>
+      <div class="px-5 no_y_scroll">
+          
+          <div class="row create_match_row_1">
+            <div class="col d-flex justify-content-left align-items-center h-100">
+              <h5 class="text-center text-decoration-underline p-0 m-0">Choose Session</h5>
+            </div>
+            {% for session in day_with_session.day_sessions.all  %}
+            <div class="col h-100">
+              <div class="d-inline-flex align-items-center h-100">
+                <input type="radio" name="ind_session" class="session_radio" value="{{session.id}}" onclick="clear_error_create_match()">
+                <label class="session_label">{{session.day_time.session_slot}}</label>
+              </div> 
+            </div>
+            {% endfor %}
+
+           
+          </div>          
+     
+        <div class="row pt-3 create_match_row_2">
+
+          <div class="col h-100">
+            <h5 class="text-center pt-2 text-decoration-underline height32">Students</h5>
+
+            <div class="scrolling_table_fixed_head_manual_match table-responsive " id="">
+              <table class="table table-striped table-sm align-middle ">
+                <thead>
+                  <tr>          
+                    <th class=""></th>          
+                    <th class=""></th>
+                    <!-- <th class=""></th> -->
+                  </tr>
+                </thead>
+                <tbody class="">
+                  {% for student in all_students %}
+                  
+                  <tr class="available_for_match" id="available_for_match-{{student.id}}">
+                    <td id="input_stu_div_{{student.id}}" onclick="clear_error_create_match()"><input type="radio" class="stu_radio new_match_radio" name="stu_choice" value ="{{student.id}}" id = "radio_stu_{{student.id}}"></td>
+                    <td> <span class="{% if not student.session_status.online_ws %} d-none {% endif %}" id="online_match_icon_{{student.id}}"> <i class="fas fa-star color_muted_green"></i> </span>{{student.full_name}}</td>
+                   
+                  </tr>
+                  {% endfor %}                  
+                </tbody>
+              </table>
+            </div>
+
+            
+          </div>
+
+          <div class="col h-100">
+            <h5 class="text-center pt-2 text-decoration-underline height32">Readers</h5>
+
+            <div class="scrolling_table_fixed_head_manual_match table-responsive" id="">
+              <table class="table table-striped table-sm align-middle ">
+                <thead>
+                  <tr>          
+                    <th class=""></th>          
+                    <th class=""></th>
+                    <!-- <th class=""></th> -->
+                  </tr>
+                </thead>
+                <tbody class="h-100">
+                  {% for reader in all_readers %}
+                  <tr class="available_for_match" id="available_for_match-{{reader.id}}">
+                    <td id="input_reader_div_{{reader.id}}" onclick="clear_error_create_match()"><input type="radio" class="reader_radio new_match_radio" name="reader_choice" value ="{{reader.id}}" id = "radio_reader_{{reader.id}}"></td>
+                    <td><span class="{% if not reader.session_status.online_ws %} d-none {% endif %}" id="online_match_icon_{{reader.id}}"> <i class="fas fa-star color_muted_green"></i> </span>{{reader.full_name}}</td>
+                  </tr>
+                  {% endfor %}                  
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <div class="col h-100">
+            <h5 class="text-center pt-2 text-decoration-underline height32">Everyone Else</h5>
+
+            <div class="scrolling_table_fixed_head_manual_match table-responsive" id="">
+              <table class="table table-striped table-sm align-middle ">
+                <thead>
+                  <tr>          
+                    <th class=""></th>          
+                    <th class=""></th>
+                  </tr>
+                </thead>
+                <tbody class="h-100">
+                  {% for person in all_rest %}
+                  <tr class="available_for_match" id="available_for_match-{{person.id}}">
+                    <td id="input_person_div_{{person.id}}" onclick="clear_error_create_match()"><input type="radio" class="reader_radio new_match_radio" name="reader_choice" value ="{{person.id}}" id = "radio_reader_{{person.id}}"></td>
+                    <td> <span class="{% if not person.session_status.online_ws %} d-none {% endif %}" id="online_match_icon_{{person.id}}"> <i class="fas fa-star color_muted_green"></i> </span>{{person.full_name}}</td>
+                  </tr>
+                  {% endfor %}                  
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          
+         
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="alert alert-danger p-1 w-100 text-center d-none" id="create_match_error">
+            <strong id="create_redirect_error_text"></strong>
+        </div>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close_create_manual_create_modal" onclick="close_create_manual_match()" >Close</button>
+        <button type="button" class="btn btn-primary" onclick="create_manual_match()">Create and Redirect</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+   
+</script>

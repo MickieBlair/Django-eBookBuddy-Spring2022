@@ -1,0 +1,1217 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+{% load registration_extras %}
+
+{% block content %}
+<div class="fixed_height_registration">	
+
+ <div class="pt-3">
+ 	<div class="d-inline-flex w-100">
+						<div class="flex-grow-1">
+							<h4 class="m-0 p-0">{{registration}}<span class="ps-3">{% if registration.flagged %} <i class="fas fa-exclamation-triangle text-danger"></i>{% endif %}</span></h4>
+						</div>
+						<div class="pe-3">
+							<a class="btn btn_sm btn-info" href="{% url 'site_admin:server_times' registration.id %}">Send Tech Email - {{registration|testing_sent}}</a>
+						</div>
+						<div class="pe-3">
+							{% if registration.status == "Approved" %}
+								{% if not registration.user %}
+									<a class="btn btn-success text-white" href="{% url 'site_admin:create_volunteer' registration.id %}">Create User</a>
+								{% else %}
+									<a class="btn btn-info btn_sm" href="{% url 'site_admin:user_info' registration.id %}">Email User Info - {{registration|user_info_sent}}</a>
+								{% endif %}
+							{% endif %}
+						</div>
+						<div class="btn-group pe-5">
+						    <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+						      Registration Sections
+						    </button>
+						    <ul class="dropdown-menu p-0 m-0 scroll_menu">
+						    	<li><text class="menu_link" onclick="scroll_to_div('notes_div')">Notes</text></li>
+
+						    	<li><hr class="dropdown-divider"></li>
+
+						    	 <li class="text-center">
+						      	<button type="button" class="btn bg-success " data-bs-toggle="modal" data-bs-target="#addNoteModal" id="addNote">
+ 									 Add Note
+								</button>						       
+						      </li>
+
+						    	<li><hr class="dropdown-divider"></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('personal_info_div')">Personal Info</text>
+						    		</li>
+
+						    	{% if registration.volunteer_type == "New" %}
+						    	<li><text class="menu_link" onclick="scroll_to_div('new_volunteer_info_div')">Source/Referral</text>
+						    		</li>
+						    	{% endif %}
+
+						    	{% if registration.volunteer_type == "Returning" %}
+						    	<li><text class="menu_link" onclick="scroll_to_div('returning_volunteer_info_div')">Returning Info</text></li>
+						    	{% endif %}
+
+						    	{% if registration.age < 18 %}
+						    	<li><text class="menu_link" onclick="scroll_to_div('parent_info_div')">Parent Info</text></li>
+						    	{% endif %}
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('device_info_div')">Device Info</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('teammeetings_div')">Team Meetings</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('session_choices_div')">Session Choices</text></li>
+
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('references_div')">References</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('children_experience_div')">Child Experience</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('reason_div')">Reason Volunteering</text></li>
+
+						    	{% if registration.other_reasons.all.count > 0 %}
+						    	<li><text class="menu_link" onclick="scroll_to_div('other_reasons_div')">Additional Reasons</text></li>
+						    	{% endif %}
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('additional_areas_div')">Volunteer in Other Areas</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('education_div')">Education</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('address_div')">Address</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('sponsor_div')">Sponsor</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('initials_div')">Initials Section</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('child_protection_div')">Child Protection Policy</text></li>
+
+						    	<li><text class="menu_link" onclick="scroll_to_div('signature_div')">Signature</text></li>  
+						    </ul>
+						  </div>
+						<div class="pe-3">
+							<h5 class="m-0 p-0">Date Submitted: <span class="fw-normal">{{registration.date_submitted}}</span></h5>
+						</div>												
+					</div>
+	
+</div>
+<div class="pt-1 outer_div_vol_reg" >
+	<div class="d-inline-flex  w-100 inner_div_vol_reg">
+		<div class="flex-grow-1 left_panel_scroll pe-4" id="scrolling_div">
+			<div class="d-inline-flex w-100" id="personal_info_div">
+				<div>
+					<div class="profile_image">
+						<img class="responsive" src="{{registration.cropped_profile_image.url}}">
+					</div>					
+				</div>
+
+
+				<div class="ps-3 flex-grow-1 pt-1" id="">
+					{% if registration.user %}
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Username:</label>
+						</div>
+						<div>
+							{{registration.user.username}}
+						</div>						
+					</div>
+					{% endif %}
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Volunteer Type:</label>
+						</div>
+						<div>
+							{{registration.volunteer_type}}
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Age:</label>
+						</div>
+						<div>
+							{{registration.age}}
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Date Of Birth:</label>
+						</div>
+						<div>
+							{{registration.dob}}
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100  border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Email:</label>
+						</div>
+						<div>
+							<a href="mailto: {{registration.email}}">{{registration.email}}</a>							
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100  border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Phone:</label>
+						</div>
+						<div>
+							{{registration.phone_format}}
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100  border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Gender:</label>
+						</div>
+						<div>
+							{{registration.gender}}
+						</div>						
+					</div>
+					
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Ethnicity:</label>
+						</div>
+						<div>
+							{{registration.ethnicity}}
+						</div>						
+					</div>
+
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Fluent in Spanish:</label>
+						</div>
+						<div>
+							{{registration.fluent_spanish}}
+						</div>						
+					</div>
+
+					
+
+				</div>
+				
+			</div>
+			{% if registration.volunteer_type == "New" %}
+			<div class="border_divider pb-3" id="new_volunteer_info_div">
+				<h5 class="text-decoration-underline pt-2 px-3">New Volunteer Source/Referral</h5>
+				<div class="ps-3">
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Source:</label>
+						</div>
+						<div>
+							{{registration.opportunity_source}}
+						</div>						
+					</div>
+					{% if registration.opportunity_source.name == "Social Media" %}
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Social Platform:</label>
+							</div>
+							<div>
+								{{registration.social_media_source}}							
+							</div>						
+						</div>						
+					
+					{% elif registration.opportunity_source.name == "Person" %}
+					<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Referred By:</label>
+							</div>
+							<div>
+								{{registration.person_referral}}							
+							</div>						
+						</div>	
+
+					{% elif registration.opportunity_source.name == "Web" %}
+					<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Web Information:</label>
+							</div>
+							<div>
+								{{registration.web_source}}							
+							</div>						
+						</div>	
+
+					{% endif %}
+					</div>
+				</div>				
+			{% endif %}
+			{% if registration.volunteer_type == "Returning" %}
+			<div class="border_divider pb-3" id='returning_volunteer_info_div'>
+				<h5 class="text-decoration-underline pt-2 px-3">Returning Volunteer Information</h5>
+				<div class="ps-3">
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Previously Paired:</label>
+						</div>
+						<div>
+							{{registration.previously_paired}}
+						</div>						
+					</div>
+					{% if registration.previously_paired == "Yes" %}
+
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Student Name/Names:</label>
+							</div>
+							<div>
+								{{registration.student_name}}								
+							</div>						
+						</div>	
+					{% endif %}	
+					<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Team Leader Name:</label>
+							</div>
+							<div>
+								{{registration.teamleader_name}}								
+							</div>						
+						</div>				
+					
+					{% if registration.returning_referred != "" %}
+
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Returning Referred Person:</label>
+							</div>
+							<div>
+								{{registration.returning_referred}}								
+							</div>						
+						</div>	
+					{% endif %}	
+					</div>					
+				</div>				
+			{% endif %}	
+
+			{% if registration.age < 18 %}
+			<div class="border_divider pb-3" id="parent_info_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Parent / Guardian Information</h5>
+				<div class="ps-3">
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Parent Name:</label>
+						</div>
+						<div>
+							{{registration.parent_name}}
+						</div>						
+					</div>
+					
+
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Parent Email:</label>
+							</div>
+							<div>
+								<a href="mailto: {{registration.parent_email}}">{{registration.parent_email}}</a>								
+							</div>						
+						</div>						
+					</div>					
+				</div>
+			{% endif %}	
+			<div class="border_divider pb-3" id="device_info_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Device Information</h5>
+			
+			
+				<div class="ps-3">
+				<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Computer - Working Camera/Mic:</label>
+						</div>
+						<div>
+							{{registration.computer}}
+						</div>						
+					</div>
+
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Device Type:</label>
+						</div>
+						<div>
+							{{registration.device_type}}
+						</div>						
+					</div>				
+				</div>
+			</div>
+			<div class="border_divider pb-3" id="teammeetings_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Available for Team Meetings</h5>
+			
+			
+				<div class="ps-3">
+					{% for time in team_meeting_times %}
+				<div class="d-inline-flex w-100">
+						<div class="flex-grow-1">
+							<label class=""><i class="fas fa-circle bullet_li"></i> {{time}}</label>
+						</div>
+						<div>
+							{% if time in registration.meeting_times.all %}                  
+							<i class="fas fa-check  match_check_green_lg"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red_lg"></i>
+							{% endif %}  
+						</div>						
+					</div>
+					{% endfor %}
+								
+				</div>
+			</div>
+
+			<div class="border_divider pb-3" id="session_choices_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Reading Session Choices </h5>
+			
+			
+				<div class="ps-3">
+					<div class="table-responsive pt-1">
+				    			<table class="table table-striped table_small align-middle">
+				    				<thead>
+				    					<tr>
+				    						<th></th>
+				    						{% for day in session_day_choices %}
+				    							<th id="day_choice-{{day.id}}" class='text-center table_choices_col_heads' scope="column">{{day}}</th>
+				    						{% endfor %}
+				    					</tr>
+				    				</thead>
+				    				<tbody>
+				    					{% for time in session_time_choices %}
+				    						<tr>
+				    							<td class="table_choices_row_names">{{time}}</td>
+				    							{% for day in session_day_choices %}
+					    							<td id="day_time-{{day.id}}" class='text-center' scope="column">    			
+							    						{% for item in session_meeting_choices %}
+							    							{% if item.day_option == day and item.time_option == time%}
+							    							{% if item in registration.session_choices.all %}                  
+																<i class="fas fa-check  match_check_green_lg"></i>
+																{% else %}
+																<i class="fas fa-times match_times_red_lg"></i>
+																{% endif %} 
+						    								
+						    								{% endif %} 
+							    						{% endfor %}
+				    							
+					    							</td>
+					    						{% endfor %}
+
+				    						</tr>
+				    					{% endfor %}
+				    				</tbody>
+				    			</table>
+				    		</div>
+					
+					
+				</div>
+			</div>	
+			<div class="border_divider pb-3" id="references_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Reference Information</h5>
+			
+			
+				<div class="ps-3">
+					<h6 class="text-decoration-underline pt-2 px-3">Reference 1</h6>
+					<div class="ps-3">
+				<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Name:</label>
+						</div>
+						<div>
+							{{registration.ref_name_1}}
+						</div>						
+					</div>
+
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Email:</label>
+						</div>
+						<div>
+							<a href="mailto: {{registration.ref_email_1}}">{{registration.ref_email_1}}</a>			
+							
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Phone:</label>
+						</div>
+						<div>
+							{{registration.ref1_phone_format}}
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Relationship:</label>
+						</div>
+						<div>
+							{{registration.ref_relationship_1}}
+						</div>						
+					</div>
+				</div>
+				
+				</div>
+				<div class="ps-3">
+					<h6 class="text-decoration-underline pt-2 px-3">Reference 2</h6>
+					<div class="ps-3">
+				<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Name:</label>
+						</div>
+						<div>
+							{{registration.ref_name_2}}
+						</div>						
+					</div>
+
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Email:</label>
+						</div>
+						<div>
+							<a href="mailto: {{registration.ref_email_2}}">{{registration.ref_email_2}}</a>	
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Phone:</label>
+						</div>
+						<div>
+							{{registration.ref2_phone_format}}
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Relationship:</label>
+						</div>
+						<div>
+							{{registration.ref_relationship_2}}
+						</div>						
+					</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="border_divider pb-3" id="children_experience_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Children Experience</h5>
+				<div class="ps-3">
+						{{registration.children_experience}}
+					</div>
+			</div>
+
+			<div class="border_divider pb-3" id="reason_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Reason for Volunteering</h5>
+				<div class="ps-3">
+						{{registration.reason}}
+					</div>
+			</div>
+
+			{% if registration.other_reasons.all.count > 0 %}
+			<div class="border_divider pb-3" id="other_reasons_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Other Reasons for Volunteering</h5>
+				<div class="ps-3">
+						{% for reason in registration.other_reasons.all %}
+						<div>
+							<i class="fas fa-circle bullet_li"></i>{{reason}} 
+							{% if reason.name == "Other (Please Specify)" %} 
+							<div class="ps-3">
+								Added - {{registration.reason_not_listed}}								
+							</div>
+							{% endif %}
+						</div>
+						
+						{% endfor %}
+					</div>
+			</div>
+			{% endif %}
+
+			
+			<div class="border_divider pb-3" id='additional_areas_div'>
+				<h5 class="text-decoration-underline pt-2 px-3">Volunteer in Other Areas</h5>
+				<div class="ps-3">
+					{% if registration.volunteer_other_areas == "Yes" %}
+						{% for reason in registration.additional_interests.all %}
+						<div>
+							<i class="fas fa-circle bullet_li"></i>{{reason}} 
+							{% if reason.name == "Other (Please Specify)" %} 
+							<div class="ps-3">
+								Added - {{registration.reason_not_listed}}								
+							</div>
+							{% endif %}
+						</div>
+						
+						{% endfor %}
+					{% else %}
+					{{registration.volunteer_other_areas}}
+					{% endif %}
+					</div>
+			</div>
+
+			<div class="border_divider pb-3" id="education_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Education Information</h5>
+				<div class="ps-3">
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> In School:</label>
+						</div>
+						<div>
+							{{registration.in_school}}
+						</div>						
+					</div>
+					{% if registration.in_school == "Yes" %}
+
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Current Education Level:</label>
+							</div>
+							<div>
+								{{registration.current_education_level}}
+							</div>						
+						</div>
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Current Education Class:</label>
+							</div>
+							<div>
+								{{registration.current_education_class}}
+							</div>						
+						</div>
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Current School:</label>
+							</div>
+							<div>
+								{{registration.current_school}}
+							</div>						
+						</div>
+					{% else %}
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="flex-grow-1">
+								<label class="fw-bold"> Highest Education Level:</label>
+							</div>
+							<div>
+								{{registration.highest_education_level}}
+							</div>						
+						</div>
+						{% endif %}
+
+					</div>
+				</div>
+
+			<div class="border_divider pb-3" id="address_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Address Information</h5>
+			
+			
+				<div class="ps-3">
+				<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Country:</label>
+						</div>
+						<div>
+							{{registration.country}}
+						</div>						
+					</div>
+
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> Address:</label>
+						</div>
+						<div>
+							{{registration.address}}
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> City, State, Zip:</label>
+						</div>
+						<div>
+							{{registration.city}}, {{registration.state}}  {{registration.zip_code}}
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1">
+							<label class="fw-bold"> County:</label>
+						</div>
+						<div>
+							{{registration.county}}
+						</div>						
+					</div>
+				
+				</div>
+			</div>	
+
+			<div class="border_divider pb-3" id="sponsor_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Sponsor Child</h5>
+			
+			
+				<div class="ps-3">	
+					<div class="d-inline-flex w-100">
+						<div class="flex-grow-1 pe-5">
+							<label class="fw-bold"> Response</label>
+						</div>
+						<div>
+							{{registration.sponsor_child}}
+						</div>						
+					</div>
+								
+				</div>
+			</div>
+
+			<div class="border_divider pb-3" id="initials_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Initials Section</h5>
+				<div class="ps-3 pt-3">
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1 pe-5">
+							<label class=""> {{agree_requirements_initials}}</label>
+						</div>
+						<div>
+							{{registration.agree_requirements_initials}}
+						</div>						
+					</div>
+				</div>
+
+				<div class="ps-3 pt-3">
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1 pe-5">
+							<label class=""> {{statements_true_initials}}</label>
+						</div>
+						<div>
+							{{registration.statements_true_initials}}
+						</div>						
+					</div>
+				</div>
+
+				<div class="ps-3 pt-3">
+					<div class="d-inline-flex w-100 border-bottom">
+						<div class="flex-grow-1 pe-5">
+							<label class=""> {{remove_volunteers_initials}}</label>
+						</div>
+						<div>
+							{{registration.remove_volunteers_initials}}
+						</div>						
+					</div>
+				</div>
+			</div>
+
+			
+
+			<div class="border_divider pb-3" id="child_protection_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Child Protection Policy</h5>
+			
+			
+				<div class="ps-3 border-bottom">	
+					<div class="d-inline-flex w-100 ">
+						<div class="flex-grow-1 pe-5">
+							<label class=""> {{convicted}}</label>
+						</div>
+						<div>
+							{{registration.convicted}}
+						</div>	
+										
+					</div>
+					{% if registration.convicted == "Yes" %}
+						<div class="alert alert-danger mb-1">
+					                <strong>{{registration.convicted_text}}</strong>
+					            </div>
+						{% endif %}	
+								
+				</div>
+				<div class="ps-3 border-bottom">	
+					<div class="d-inline-flex w-100">
+						<div class="flex-grow-1 pe-5">
+							<label class=""> {{charges_pending}}</label>
+						</div>
+						<div>
+							{{registration.charges_pending}}
+						</div>						
+					</div>
+					{% if registration.charges_pending == "Yes" %}
+						<div class="alert alert-danger mb-1">
+					                <strong>{{registration.charges_pending_text}}</strong>
+					            </div>
+						{% endif %}	
+								
+								
+				</div>
+				<div class="ps-3 border-bottom">	
+					<div class="d-inline-flex w-100 ">
+						<div class="flex-grow-1 pe-5">
+							<label class=""> {{refused_participation}}</label>
+						</div>
+						<div>
+							{{registration.refused_participation}}
+						</div>						
+					</div>
+					{% if registration.refused_participation == "Yes" %}
+						<div class="alert alert-danger mb-1">
+					                <strong>{{registration.refused_participation_text}}</strong>
+					            </div>
+						{% endif %}	
+								
+								
+				</div>
+			</div>	
+
+			<div class="border_divider pb-3" id="signature_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Signature</h5>
+			
+			
+				<div class="ps-3">	
+					<div class="d-inline-flex w-100">
+						<div class="flex-grow-1 pe-5">
+							<label class="fw-bold"> Response</label>
+						</div>
+						<div>
+							{{registration.full_name_signature}}
+						</div>						
+					</div>
+								
+				</div>
+			</div>	
+
+			<div class="border_divider pb-3" id="notes_div">
+				<h5 class="text-decoration-underline pt-2 px-3">Notes</h5>
+			
+			
+				<div class="ps-3 w-100">	
+					{% for note in registration.notes.all %}
+					<div class="border w-100 p-2 m-1">
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="w-100">
+								<text class="fw-bold">Date: <span class="fw-normal">{{note.date_created}}</span></text>
+							</div>							
+							<div class='text-end w-100'>
+								{% if note.created_user %}
+								<text class="fw-bold">Created By: <span class="fw-normal">{{note.created_user}}</span></text>
+								{% else %}
+									System Added
+								{% endif %}								
+							</div>
+							
+						</div>
+						<div><text class="fw-bold">Type: <span class="fw-normal">{{note.name}}</span></text></div>
+						{% if note.content %}						
+						<div class="bg-light">{{note.content}}</div>
+						{% endif %}
+					<!-- {{note}} -->
+					</div>
+					{% endfor %}
+								
+				</div>
+				<h5 class="text-decoration-underline pt-2 px-3"> User Notes</h5>			
+			
+				<div class="ps-3 w-100">	
+					{% for note in registration.user.note_about.all %}
+					<div class="border w-100 p-2 m-1">
+						<div class="d-inline-flex w-100 border-bottom">
+							<div class="w-100">
+								<text class="fw-bold">Date: <span class="fw-normal">{{note.date_created}}</span></text>
+							</div>							
+							<div class='text-end w-100'>
+								{% if note.created_user %}
+								<text class="fw-bold">Created By: <span class="fw-normal">{{note.created_user}}</span></text>
+								{% else %}
+									System Added
+								{% endif %}								
+							</div>
+							
+						</div>
+						<div><text class="fw-bold">Note: <span class="fw-normal">{{note.note}}</span></text></div>
+						
+					</div>
+					{% endfor %}
+								
+				</div>
+			</div>			
+
+			<!-- {% for field in reg_form %}
+			 <div>
+	            <label>{{ field.name }}</label>
+	            text>{{ field.value }}</text> 
+	        </div>				
+			{% endfor %} -->
+				
+
+		</div>
+		<div class=" d-flex justify-content-end align-items-start ps-3">
+			<div class="card status_card">
+				<div class="card-header text-center m-0 p-1 custom_bg_light_purple">
+					<h5 class="p-0 m-0">Current Volunteer Application Status</h5>				
+				</div>
+				<div class="text-center pt-1 px-3">
+					<button type="button" class="btn custom_bg_dark_teal w-100" data-bs-toggle="modal" data-bs-target="#statusModal" onclick="allow_scroll()">
+  						Adjust Status
+					</button>					
+				</div>	
+				<div class="card-body pt-1">
+					<div class="d-inline-flex w-100 px-3 border-top border-start border-end p-1">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Approved to Match</text>
+						</div>
+						<div>
+							{% if status.approved_to_match %}                  
+							<i class="fas fa-check  match_check_green_lg"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red_lg"></i>
+							{% endif %}  
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 px-3 border-top border-start border-end align-items-center p-1">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Tech Screening</text>
+						</div>
+						<div>
+							{{status.tech_screening}}
+							
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 px-3 border-top border-start border-end p-1">
+						<div class="flex-grow-1">
+							<text class="fw-bold pe-4">Video Uploaded </text>
+							{% if status.video_uploaded %}                  
+							<text class="ps-4 fw-bold"><a href="{{registration.volunteer_video.videofile.url}}">Watch <i class="fas fa-play text-primary ms-1"></i></a></text>
+							
+							{% endif %} 
+						</div>
+						<div>
+							{% if status.video_uploaded %}                  
+							<i class="fas fa-check  match_check_green_lg"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red_lg"></i>
+							{% endif %}  
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 px-3 border p-1">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Video Reviewed</text>
+						</div>
+						<div>
+							{% if status.video_reviewed %}                  
+							<i class="fas fa-check  match_check_green_lg"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red_lg"></i>
+							{% endif %}  
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 px-3 border p-1">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Live Screening Passed</text>
+						</div>
+						<div>
+							{% if status.live_screening_passed %}                  
+							<i class="fas fa-check  match_check_green_lg"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red_lg"></i>
+							{% endif %}  
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 px-3 border p-1">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Online Training Completed</text>
+						</div>
+						<div>
+							{% if status.online_training_completed %}                  
+							<i class="fas fa-check  match_check_green_lg"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red_lg"></i>
+							{% endif %}  
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 px-3 border p-1">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Orientation</text>
+						</div>
+						<div>
+							{% if status.orientation %}                  
+							<i class="fas fa-check  match_check_green_lg"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red_lg"></i>
+							{% endif %}  
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 px-3 border p-1">
+						<div class="flex-grow-1">
+							<text class="fw-bold">References Checked</text>
+						</div>
+						<div>
+							{% if status.reference_check %}                  
+							<i class="fas fa-check  match_check_green_lg"></i>
+							{% else %}
+							<i class="fas fa-times match_times_red_lg"></i>
+							{% endif %}  
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 px-3 border p-1">
+						<div class="flex-grow-1">
+							<text class="fw-bold pe-5">Application Denied</text>
+							{% if status.denied %}                  
+							<button type="button" class="denied_reason_btn" data-bs-toggle="modal" data-bs-target="#deniedModal" id="denied_reason_btn">
+  Reason
+</button>
+
+							
+							{% endif %} 
+						</div>
+						<div>
+							{% if status.denied %}                  
+							<text class="text-danger fw-bold">YES</text>
+							{% else %}
+							<text class="text-success fw-bold">No</text>
+							{% endif %}  
+						</div>						
+					</div>
+					
+				</div>
+				<div class="card-footer bg-light font_12">
+					<div class="d-inline-flex w-100  px-2">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Last Updated</text>
+						</div>
+						<div>
+							{% if status.last_updated %}                  
+							{{status.last_updated}} 
+							{% else %}
+							None
+							{% endif %} 
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100 border-bottom px-2">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Last Updated By</text>
+						</div>
+						<div>
+							{% if status.last_updated_by %}                  
+							{{status.last_updated_by.full_name}} 
+							{% else %}
+							None
+							{% endif %} 							
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100  px-2">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Date Approved</text>
+						</div>
+						<div>
+							{% if status.date_approved %}                  
+							{{status.date_approved}} 
+							{% else %}
+							None
+							{% endif %} 
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100  border-bottom px-2">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Approved By</text>
+						</div>
+						<div>
+							{% if status.approved_by %}                  
+							{{status.approved_by.full_name}} 
+							{% else %}
+							None
+							{% endif %}  
+							
+						</div>						
+					</div>
+
+					<div class="d-inline-flex w-100  px-2">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Date Denied</text>
+						</div>
+						<div>
+							{% if status.date_denied %}                  
+							{{status.date_denied}} 
+							{% else %}
+							None
+							{% endif %}  
+							
+						</div>						
+					</div>
+					<div class="d-inline-flex w-100  border-bottom px-2">
+						<div class="flex-grow-1">
+							<text class="fw-bold">Denied By</text>
+						</div>
+						<div>
+							{% if status.denied_by %}                  
+							{{status.denied_by.full_name}} 
+							{% else %}
+							None
+							{% endif %}  
+							
+						</div>						
+					</div>
+
+					
+				</div>
+							
+			</div>			
+		</div>	
+	</div>	
+</div>
+
+
+
+
+<div class="modal fade status_modal" id="statusModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header move_cursor custom_bg_dark_teal">
+        <h5 class="modal-title" id="statusModalLabel">{{registration.full_name}}</h5>
+       
+      </div>
+      <div class="modal-body bg-light p-1">
+      	<form method="POST" id="vol_reg_status_form">
+			{%csrf_token%}
+      		{% for field in form %}
+      		{% if field.name == 'registration' or field.name == 'approved_by' or field.name == 'last_updated_by' or field.name == 'date_approved' or field.name == 'date_denied' or field.name == 'denied_by'%}
+      		<div class="fieldWrapper d-none">
+      			<div class="d-inline-flex w-100 px-3 px-1 ">
+					<div class="flex-grow-1">
+						<text class="fw-bold">{{field.name}}</text>
+					</div>
+					<div>
+						{{field}}
+						
+					</div>						
+				</div>
+      		</div>
+
+      		{% elif field.name == 'tech_screening' %}
+      		<div class="fieldWrapper border p-1 bg-white">
+				<div class="d-inline-flex w-100 px-3 px-1 ">
+					<div class="flex-grow-1">
+						<text class="fw-bold">{{ field.label_tag }}</text>
+					</div>
+					<div class="">
+						{{field}}
+						
+					</div>						
+				</div>
+			</div>
+			 
+			{% else %}
+			<div class="fieldWrapper border p-1 bg-white">
+				<div class="d-inline-flex w-100 px-3 px-1 ">
+					<div class="flex-grow-1">
+						<text class="fw-bold">{{ field.label_tag }}</text>
+					</div>
+					<div class="d-flex align-items-center">
+						{{field}}
+						
+					</div>						
+				</div>
+			</div>
+
+			{% endif %}			
+			{% endfor %}
+        
+		<!-- {{form.as_p}} -->
+		<div class = 'd-none'>
+			<input type="submit" name="update_status" id="submit_vol_changes">
+		</div>
+		
+		</form>
+
+      </div>
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close Without Saving</button>
+        <button type="button" class="btn btn-success" onclick="save_vol_changes()">Save Changes</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade deniedModal" id="deniedModal" tabindex="-1" aria-labelledby="deniedModalLabel" aria-hidden="true">	
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title" id="deniedModalLabel">Reason Denied</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="p-3">
+        	{% if status.denied_reason != '' %}
+        	{{status.denied_reason}}
+        	{% else %}
+        	<text> A reason was not added by {{status.denied_by.full_name}}.</text>
+        	{% endif %}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>        
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="modal fade status_modal" id="addNoteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-info">
+        <h5 class="modal-title" id="addNoteModal">Add A Note</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body bg-light">
+        <div class="p-3">
+        	<form method="POST" id="vol_add_note">
+			{%csrf_token%}
+      		{% for field in note_form %}
+      		{% if field.name == 'registration' or field.name == 'name' or field.name == 'created_user'%}
+      		<div class="fieldWrapper d-none">
+      			<div class="d-inline-flex w-100 px-3 px-1 ">
+					<div class="flex-grow-1">
+						<text class="fw-bold">{{field.name}}</text>
+					</div>
+					<div>
+						{{field}}
+						
+					</div>						
+				</div>
+				<div class="errors text_center w-100 pe-3" id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+				    		<div class="field_indent">
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        </div>
+					        {% endfor %}
+				    	</div>
+      		</div>
+
+			 
+			{% else %}
+			<div class="fieldWrapper ">
+				<div class="w-100 ">
+					<div class="pb-2">
+						<text class="fw-bold">{{ field.label_tag }}</text>
+					</div>
+					<div class="pb-2">
+						{{field}}
+						
+					</div>						
+				</div>
+				<div class="errors text_center w-100 pe-3 " id="{{field.name}}_errors">
+				    		{% for error in field.errors %}
+				    		<div class="field_indent">
+					            <div class="alert alert-danger mb-1">
+					                <strong>{{ error|escape }}</strong>
+					            </div>
+					        </div>
+					        {% endfor %}
+				    	</div>
+			</div>
+
+			{% endif %}			
+			{% endfor %}
+        
+		
+		<div class = 'd-none'>
+			<input type="submit" name="add_note" id="add_vol_note">
+		</div>
+		
+		</form>
+        </div>
+      </div>
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close Without Saving</button>
+        <button type="button" class="btn btn-success" onclick="save_vol_note()">Add Note</button>
+      </div>
+  </div>
+</div>
+
+</div>
+{% endblock content %} 
+

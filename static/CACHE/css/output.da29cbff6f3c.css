@@ -1,0 +1,25 @@
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body{
+	/*background-image: url('/static/images/pattern_triangle.png?d5b24367cc4e');*/
+	/*background-size: contain;*/
+	/*background-position: fixed;*/
+    min-height:100vh;
+    display: flex;
+    flex-flow: column nowrap;
+	justify-content: space-between;
+	background-color: #f9fafb0f;
+  }
+
+.main_content{
+	margin-top: 60px;
+	flex: 1 1 auto;
+	padding: 0 0 0;	
+	background-color: red;
+}
+
+

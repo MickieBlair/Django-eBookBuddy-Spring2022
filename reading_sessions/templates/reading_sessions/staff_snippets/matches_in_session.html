@@ -1,0 +1,29 @@
+<div class="outer_session_div" id="outer_session_div_{{session.day_time.session_slot}}">
+    <div class="session_slot_attendance" id="attendance_for_{{session.day_time.session_slot}}">
+        <div class="session_description">
+            <div class="">
+                <h5 class="border-bottom m-0 p-0">{{todays_date}} - {{session.day_time.get_short_name}} - {{session.day_time.time_start}} Matches</h5>
+            </div>
+            <div class="row m-0 p-0 bg-light">
+                <div class="col d-flex justify-content-center align-items-end m-0 p-0">      
+                    <div>
+                    <text class="pt-0 fw-bold">Scheduled: <span class="fw-normal" id="scheduled_count-{{session.id}}">{{session.active_scheduled_matches_in_session.count}}</span></text>
+                    </div>
+                </div> 
+                <div class="col d-flex justify-content-center align-items-end m-0 p-0">      
+                    <div>
+                    <text class="pt-0 fw-bold">Temporary: <span class="fw-normal" id="temp_match_count-{{session.id}}">
+                    {{session.active_temporary_matches_in_session.count}}</span></text>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- <div> -->
+            {% include 'reading_sessions/staff_snippets/session_match_table.html' with session=session type_match='all'%}
+        <!-- </div> -->
+    </div>
+</div>
+    
+      
+        

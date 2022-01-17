@@ -1,0 +1,85 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="20" background="https://spring-2022-gobuddy.s3.amazonaws.com/static/images/pattern_triangle.png">
+<tr>
+<td>
+<p>
+	<div style="text-align: center;">
+		<img src="https://spring-2022-gobuddy.s3.amazonaws.com/static/images/ebookbuddylogo.png">
+		<h2 style='text-align: center; color: #735383; background-color: #fff;'>
+			eBookBuddy |Student Confirmation - You Are Registered!
+		</h2>	
+	</div>
+
+	<div style="background-color: #f4fafb; padding: 16px; border: 1px solid #735383;">
+	
+		<h2 style='text-align: center; color: #735383;'>
+			We are so excited and happy that you decided to join us! Welcome! 🥳
+		</h2>
+
+		<div>
+			<p style="font-weight: bold;">
+				{% if registration.registration_language.iso == "en" %}
+					{{child_list.message_content}}
+				{% else %}
+					{{child_list.span_content}}
+				{% endif %}
+			</p>
+
+			<div>
+				{% for child in registration.parent_info.all %}
+				<div>
+					{{child.child_first_name}} {{child.child_last_name}}
+				</div>		
+				{% endfor %}
+			</div>
+		</div>
+
+		<h3>
+			{% if registration.registration_language.iso == "en" %}
+				{{text_link.message_content}}
+			{% else %}
+				{{text_link.span_content}}
+			{% endif %}
+		</h3>
+
+		<div>	
+			<a href={{link}}> 
+				{% if registration.registration_language.iso == "en" %}
+					{{register_another.message_content}}
+				{% else %}
+					{{register_another.span_content}}
+				{% endif %}
+
+			</a>
+		</div>
+
+		<p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><br></p>
+		
+		<hr>
+		<p><span style="font-size:14pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:underline;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Please read all of the following:</span></p>
+		<hr>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">🟡 My name is Tails! ☺️ Nice to meet you!! I am going to be helping you with our program. If you have questions or comments, please reach out to me. My door is always open. I will be more than happy to help out with whatever you may need! 💕</span></p>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">🟡 The reading sessions will start February 15, 2022! We will be having a short mandatory orientation the week prior.  During this meeting, we will help you and your child navigate the program, and make sure both the camera and microphone work. </span></p>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">🟡 We are going to be communicating via WhatsApp - I will be sending you: reminders, important details, updates, and some other points! (Don&rsquo;t worry, it&rsquo;s a channel so no spammy stuff!)</span></p>
+		<hr>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:underline;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Now, some action steps that you need to take to confirm your spot in our eBookBuddy Program:</span></p>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">✅ If you do not have WhatsApp yet - please download the app and create your account.</span></p>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">✅ Then, click this link and it will take you to WhatsApp to send a message! - This will confirm your spot in our eBookBuddy program.</span></p>
+		<p><a href="https://wa.me/50488976195?text=Hello,%20Tails!!%20I%20have%20just%20registered%20for%20the%20eBookBuddy%20Spring%20Program!%20%F0%9F%8C%B8%F0%9F%93%9A%20Please,%20take%20me%20through%20the%20next%20steps!%20" style="text-decoration:none;"><span style="font-size:11pt;font-family:Arial;color:#1155cc;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:underline;-webkit-text-decoration-skip:none;text-decoration-skip-ink:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Click Here to Join!</span></a></p>
+		<hr>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">That&rsquo;s it for now!</span></p>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">⚠️ Please complete those 2 steps so you can confirm your spot at our program! - After completing those steps, we can proceed with scheduling your child for the reading sessions.</span></p>
+		<hr>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">If you need help with anything, absolutely reach out and I will more than happy to help! 🤗&nbsp;</span><a href="mailto:tails@ebookbuddy.org" style="text-decoration:none;"><span style="font-size:11pt;font-family:Arial;color:#1155cc;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:underline;-webkit-text-decoration-skip:none;text-decoration-skip-ink:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">tails@ebookbuddy.org</span></a></p>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">I look forward to hearing back from you!</span></p>
+		<p><span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">My all best,</span>
+		<br>
+		<span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Tails Pineda</span>
+		<br>
+		<span style="font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">eBookBuddy Staff</span></p>
+		<p><br></p>
+
+</p>
+</td>
+</tr>
+</table>
+

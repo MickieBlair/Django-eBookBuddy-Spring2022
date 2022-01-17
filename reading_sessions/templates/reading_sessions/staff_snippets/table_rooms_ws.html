@@ -1,0 +1,53 @@
+  <div class="table-responsive scrolling_table_fixed_head">
+  <table class="table table-sm table-striped align-middle">
+    <thead class="fw-bold w-100" >
+      <tr>
+        <th class="ps-2">Room</th>
+        <th>In Room</th>        
+        <th class="text-center ">Count</th>       
+      </tr>
+    </thead>
+          <tbody id="tbody_rooms_participants">
+      {% for room in all_rooms %}
+
+
+         <tr class="room_row p-0 m-0" id="room_{{room.id}}">
+           <td class="ps-2 py-0">
+            <div class="">
+              <a class="p-0 m-0" href="{% url 'reading_sessions:room' room.slug %}">{{room}}</a> 
+            </div>
+           </td>
+          <td class="py-0 m-0" >
+            <div id="room_ws_participants_{{room.id}}">
+          {% for part in room.participants.ws_users.all%}
+            <div class="socket_status_{{part.id}}" id="ws_participant_{{part.id}}">
+              {{part}}
+            </div>
+            {% endfor%} 
+              
+            </div>
+
+          </td>
+          <td class="text-center py-0 m-0" >
+            <div class="d-inline-flex w-100 justify-content-center">
+              <div class="fw-bold fixed_width_35 d-flex justify-content-start">WS: </div>
+              <div class="ps-2" id="ws_room_count_{{room.id}}">
+                {{room.participants.ws_count}}
+              </div>              
+            </div>
+            <div class="d-inline-flex w-100 justify-content-center">
+              <div class="fw-bold fixed_width_35 d-flex justify-content-start">J: </div>
+              <div class="ps-2" id="jitsi_room_count_{{room.id}}">
+              {{room.participants.jitsi_count}}
+            </div>             
+            </div>
+            
+            
+            
+          </td>
+                    
+        </tr>
+        {% endfor %}
+      </tbody>
+  </table>
+</div>

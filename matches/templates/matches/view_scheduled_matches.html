@@ -1,0 +1,144 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+{% load users_extras %}
+
+{% block content %}
+<div class="fixed_height_registration">
+<div class="page_title_bar">
+  <div class="row  w-100">
+      <div class="col d-grid align-items-end">
+        <h3 class="m-0 p-0 page_h3">{{match_type}} Scheduled Matches - {{count}}</h3>
+      </div>
+      <div class="col d-flex justify-content-center align-items-end pe-5">
+        <div class="d-inline-flex ">
+          <div class="pe-1">
+            <a class="btn bg-success btn-sm fw-bold" href="{% url 'site_admin:create_match' %}">Create New</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_purple btn-sm fixed_width_90px text-white" href="{% url 'site_admin:view_scheduled' 'All' %}">All</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_purple btn-sm fixed_width_90px text-white" href="{% url 'site_admin:view_scheduled' 'Active' %}">Active</a>
+          </div>
+          <div class="pe-1">
+            <a class="btn custom_bg_dark_purple btn-sm fixed_width_90px text-white" href="{% url 'site_admin:view_scheduled' 'Inactive' %}">Inactive</a>
+          </div>
+                  
+        </div>        
+      </div>      
+      <div class="col col-lg-3 p-0 d-inline-flex justify-content-end align-items-end">
+        <form class="form-inline w-100" id="searchForm" method="GET">
+          <div class="d-inline-flex w-100">
+            <div class="flex-grow-1 pe-1">
+              <input class="form-control" type="text" placeholder="Search Matches..." name="q" id="id_q"> 
+            </div>
+            <div class="">
+              <button type="submit" class="search_button"><i class="fas fa-search search_icon"></i></button>
+            </div>
+          
+        </div>      
+      </form>
+      </div>
+    </div>
+</div>
+
+<div class="stats_bar">
+  <div class="container-fluid my-3 border-top border-bottom bg-light">
+    <div class="row row-cols-3 gx-0 w-100">
+      <div class="col text-center">    
+          <h6 class="py-2 m-0">All = {{total_matches}}</h6>            
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Active = {{active_count}}</h6>
+      </div>
+      <div class="col text-center">
+        <h6 class="py-2 m-0">Inactive = {{inactive_count}}</h6>
+      </div>    
+    </div>
+  </div>
+</div>
+<div class="table-responsive scrolling_table_fixed_head">
+  <table class="table table_sm table-striped align-middle">
+    <thead class="fw-bold" >
+      <tr>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Student</th>
+        <th>Reader</th>
+        <th>Schedule</th>
+        <th>Attendance</th>
+        <th>Notes</th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
+      </tr>
+    </thead>
+    <tbody >
+
+    {% for match in matches %}
+      <tr>
+        <td>{{match.id}}</td>
+        <td>{{match.status}}</td>
+        <td>
+          <div>
+          <text class="fw-bold font_12">Username: <span class="fw-bold">{{match.student.username}}</span></text>          
+          </div>
+          <div>
+          <text>{{match.student.full_name}}</text>
+          </div>
+      </td>
+      <td>
+          <div>
+          <text class="fw-bold font_12">Username: <span class="fw-bold">{{match.reader.username}}</span></text>          
+          </div>
+          <div>
+          <text>{{match.reader.full_name}}</text>
+          </div>
+      </td>
+      
+        <td>
+          <ul class="p-0 m-0 list-unstyled">
+            {% for option in match.day_times.session_day_times.all %}
+            <li><text class="font_12">{{option.day.short_name}} - {{option.session_slot}}</text></li>
+            {% endfor %}
+          </ul>
+        </td>
+        <td><a class="" href="{% url 'site_admin:match_sessions' match.id %}">View</a></td>
+        <td> 
+        <a class="" href="{% url 'site_admin:match_notes' match.id %}">View</a> 
+        <!--   <ul class="p-0 m-0">            
+            {% for note in match.notes.all %}
+              <li>
+                <div>
+                  <text class="font_12 fw-bold">{{note.date_created}} - {{note.created_user}}:</text>
+                </div>
+                <div>
+                  <text class="font_12">{{note.name}}</text>
+                </div>
+                
+              </li>
+            {% endfor %}       
+            </ul> -->
+        </td>
+        <td class="text-center">{% if match.active %}<a class="btn btn-sm btn-warning" href="{% url 'site_admin:edit_match' match.id %}">Adjust Slots</a>{% endif %}</td>
+        <td class="text-center">{% if match.active %}<a class="btn btn-sm btn-danger" href="{% url 'site_admin:set_inactive' match.id %}">Set Inactive</a>{% endif %}</td>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+
+
+</div>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+

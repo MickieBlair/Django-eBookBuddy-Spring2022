@@ -1,0 +1,29 @@
+ {% load static %}
+ {% load compress %}
+
+  <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>  
+
+
+{% compress js %}
+  <script src="{% static 'js/site_scripts.js' %}" charset="utf-8"></script>
+  <script src="{% static 'js/testing_scripts.js' %}" charset="utf-8"></script>
+{% endcompress %}
+
+
+ {% if load_cropperjs_scripts %}
+    <script type="module" src="{% static 'cropperjs/dist/cropper.min.js' %}"></script>
+    <script src="{% static 'js/crop_image_scripts.js' %}" charset="utf-8"></script>
+  {% endif %}
+
+  {% if load_registration_websocket %}
+    {% block registration_websocket_script %}
+      {% include 'registration/websocket/connect_registration_ws.html' %}
+    {% endblock registration_websocket_script %}
+  {% endif %}
+
+  {% include 'testing/snippets/jitsi_data_websocket.html' %}

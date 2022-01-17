@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="login_card mx-auto my-5">
+        <div class="card mx-auto">
+          <div class="card-header custom_bg_light_teal">
+            <h3 class="m-0 w-100 text-center fw-bold">Sign In!</h3>
+          </div>
+          <div class="card-body">
+            <div class="row m-3">
+              <div class="col mx-auto">
+                <form method="POST">
+                  {% csrf_token %}
+                  <div class="my-2">
+                    <div class="grid">
+                      <label for="id_username" class="visually-hidden">Username</label>
+                      <input type="text" id="id_username" name="username" class="form-control" placeholder="Username" required autofocus>
+                    </div>
+                  </div>
+
+                  <div class="my-2">
+                    <label for="id_password" class="visually-hidden">Password</label>
+                    <input type="password" id="id_password" name="password" class="form-control" placeholder="Password" required>
+                  </div>
+                  <div class="px-5 text-danger d-grid justify-content-center align-items-center" >
+                  <div>
+                    {% for field in login_form %}
+                        <p>
+                          {% for error in field.errors %}
+                            <p class="error">{{ error }}</p>
+                          {% endfor %}
+                        </p>
+                    {% endfor %}
+                    {% if login_form.non_field_errors %}
+                      <div class="">
+                        <p>{{login_form.non_field_errors}}</p>
+                      </div>                        
+                    {% endif %}                
+                  </div>                 
+                    
+                  </div>
+                  <button class="w-100 btn btn-lg custom_bg_medium_purple my-2 fw-bold" type="submit">Let's Go !</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+</div>
+{% endblock content %}

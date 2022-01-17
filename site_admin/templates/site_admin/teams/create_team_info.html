@@ -1,0 +1,164 @@
+{% extends 'site_admin/site_admin_base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center p-3">
+  <div class="card ">
+    <div class="card-header custom_bg_light_teal">
+        <h3 class="w-100 text-center fw-bold m-0">Add Volunteer Team Info</h3>
+        <div class="text-center">
+          <h5 class="m-0 p-2">{{member.full_name}}</h5>
+        </div>
+
+        
+    </div>
+    <div class="card-body px-3 py-0">
+
+      <form method="POST" id="create_team_form">
+        {% csrf_token %}
+         {% for field in form %}
+
+         {% if field.name == 'user' or field.name == 'mega' or field.name == 'team_role'%}
+         <div class="fieldWrapper  border my-1 py-1 w-100 d-none" id="fieldWrapper_{{field.name}}">
+            <div class="d-inline-flex w-100 px-3">
+              <div class="flex-grow-1 pe-3">
+                <label class="fw-bold">{{ field.label_tag }}</label>
+              </div>
+              <div class="fixed_width_300px">
+                {{field}}                           
+              </div>              
+            </div>
+
+            <div class="" id="{{field.name}}_errors">
+                {% for error in field.errors %}
+                  <div class="alert alert-danger mb-1">
+                    <strong>{{ error|escape }}</strong>
+                  </div>
+                {% endfor %}
+              </div>              
+            </div>
+        
+
+         {% elif field.name == 'team'%}
+         <div class="fieldWrapper bg-light border my-2 py-1 w-100" id="manual_fieldWrapper_{{field.name}}">
+          <div>
+            <h4 class="text-decoration-underline py-2 text-center">Choose Team:</h4>
+          </div>        
+              <div class="px-3">
+                <div class="row px-3 ">
+                  {% for mega_team in mega_teams %}
+                  <div class="col fixed_width_300px">
+                    <div class="fw-bold w-100 text-center border-bottom">
+                      <div class="fw-bold">
+                        <h5 class="m-0 py-1">{{mega_team}}</h5>
+                      </div>
+                      <div class="fw-normal">
+                        <text class="fw-bold"> Coordinator: </text>
+                        {{mega_team.coordinator.full_name}}
+                      </div>
+                      
+                    </div> 
+                    <div>
+                      {% for team in teams %}
+                      {% if team.mega == mega_team %}
+                      <div class="d-flex justify-content-center w-100">
+                        {% for item in team_choices %}
+             
+                               {% if item.1.mega == mega_team and item.1 == team%}
+                               <div class="d-inline-flex align-items-center w-100 border">
+                                <div class="ps-1 pe-2">
+                                  <div class="d-inline-flex align-items-center">
+                                   <input type="radio" name="{{field.name}}" value="{{item.1.id}}" class="registration_radio" onclick="clear_input_errors('{{field.name}}')" id="id_team_{{item.0}}" {% if item.1 == cleaned_team %} checked {% elif item.1 == form.instance.team %} checked {% endif %}>
+
+                                </div> 
+                                </div>
+                                <div class="flex-grow-1">
+                                  <div>
+                                  <div class="fw-bold">
+                                  {{item.1.name}}
+                                </div>
+                                  </div>
+                                  <div class="">
+                                    <text class="fw-bold">Time: </text>
+                                    {{item.1.meeting_day.short_name}} - {{item.1.meeting_time}}
+                                  </div>
+                                  <div>
+                                    <text class="fw-bold">TL: </text>
+                                    {{item.1.leader.full_name}}
+                                  </div>
+                                </div>
+                               </div>
+               <!--                 <div class="d-inline-flex align-items-center">
+                                 <div class="pe-3 d-inline-flex align-items-center">
+                                   <input type="radio" name="{{field.name}}" value="{{item.1.id}}" class="registration_radio" onclick="clear_input_errors('{{field.name}}')" id="id_team_{{item.0}}" {% if item.1 == cleaned_team %} checked {% endif %}>
+                                </div> 
+                                <div class="d-flex align-items-center">
+                                  {{item.1.name}}
+                                </div>
+                               </div> -->
+                                
+                                {% endif %} 
+                              {% endfor %}
+                      </div>
+                      {% endif %}
+                      {% endfor %}
+                    </div>                                  
+                  </div>
+
+                  {% endfor %}                
+                </div>
+              </div>
+              <div class="errors text_center w-100 py-1 px-3 text-center" id="{{field.name}}_errors">
+                {% for error in field.errors %}
+                      <div class="alert alert-danger mb-1 p-1">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                  {% endfor %}
+              </div>
+
+            </div>
+
+         {% else %}
+          <div class="fieldWrapper bg-light border my-1 py-1 w-100" id="fieldWrapper_{{field.name}}">
+            <div class="d-inline-flex w-100 px-3">
+              <div class="fixed_width_label pe-3 d-grid align-items-center">
+                <label class="fw-bold">{{ field.label_tag }}</label>
+              </div>
+              <div class="flex-grow-1 fixed_width_300px {% if field.name == 'password_change_required' %} d-flex align-items-center {% endif %}">
+                {{field}}                           
+              </div>              
+            </div>
+
+            <div class="px-3 py-1" id="{{field.name}}_errors">
+                {% for error in field.errors %}
+                  <div class="alert alert-danger my-1 p-1 text-center">
+                    <strong>{{ error|escape }}</strong>
+                  </div>
+                {% endfor %}
+              </div>              
+            </div>
+          {% endif %}
+          {% endfor %}
+          <div class="py-1">
+            <button class="w-100 btn btn-lg btn-success" type="submit">Save Team Info</button>
+          </div>
+          
+      </form>      
+    </div>   
+  </div>  
+</div>
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+

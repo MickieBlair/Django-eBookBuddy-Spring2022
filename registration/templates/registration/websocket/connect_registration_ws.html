@@ -1,0 +1,79 @@
+<script type="text/javascript">
+	console.log("Connecting Registration Websocket")
+
+	if (ws_scheme == "ws"){
+		// console.log("ws_scheme", ws_scheme)
+		reg_ws_path = ws_scheme + '://' + window.location.host + "/registration/"; // 		
+
+	} else if (ws_scheme == "wss"){
+		// console.log("ws_scheme", ws_scheme)
+		reg_ws_path = ws_scheme + '://' + window.location.host + ":8001/registration/";
+	} else {
+		console.log("Else ws_scheme", ws_scheme)
+	}
+
+	console.log("ws_scheme", ws_scheme)
+	console.log("reg_ws_path", reg_ws_path)
+
+	let registration_socket = null
+
+	function getSocket() {
+
+	if (getSocket.server && getSocket.server.readyState < 2) {
+		console.log("reusing the socket connection [state = " + getSocket.server.readyState + "]: " + getSocket.server.url);
+		return Promise.resolve(getSocket.server);
+		}
+
+		return new Promise(function (resolve, reject) {
+
+		getSocket.server = new WebSocket(reg_ws_path);
+
+	    getSocket.server.onopen = function () {
+	      console.log("Registration socket connection is opened [state = " + getSocket.server.readyState + "]: " + getSocket.server.url);
+	      registration_socket=getSocket.server;
+	      resolve(getSocket.server);
+	      send_test()
+	    };
+
+	    getSocket.server.onerror = function (err) {
+	      console.error("Registration socket connection error : ", err);
+	      // alert("Registration socket connection error : ", err)
+	      reject(err);
+	    };
+
+	    getSocket.server.onclose = function (err) {
+	      console.error("Registration socket onclose : ", err);
+	      registration_socket=null;
+	      reject(err);
+	    };	
+
+	    getSocket.server.onmessage = function(message) {
+        let server_data = JSON.parse(message.data);
+          	try {
+			  process_incoming_messages(server_data);
+			} catch (error) {
+			  console.error(error);
+			}
+        
+      };
+
+
+	  });
+	}
+
+	function process_incoming_messages(server_data){
+		console.log("Incoming", server_data)
+	}
+
+	function send_test(){
+		console.log("Sending Test")
+		// alert("Registration socket connected : ", "{{registration_type}}" , "{{registration_id}}")
+		registration_socket.send(JSON.stringify({
+            "command": "test",
+            "reg_type": "{{registration_type}}",
+            "reg_id": "{{registration_id}}",
+          }));
+	}
+
+	getSocket()
+</script>

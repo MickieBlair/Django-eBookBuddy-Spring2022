@@ -1,0 +1,68 @@
+<script type="text/javascript">
+
+function all_rooms_one_by_one(){
+
+    $.ajax({
+      type: 'GET',
+      url: "{% url 'testing:check_all_rooms' %}",
+      success: function (response) {
+        console.log("Success")
+        console.log(response)
+      },
+      error: function (response) {
+        console.log("Fail")
+          console.log(response)
+      }
+    });
+
+}
+
+function get_room_participants(){
+  // const numberOfParticipants = api.getNumberOfParticipants();
+  // console.log("numberOfParticipants", numberOfParticipants);
+
+  // let participants = api.getParticipantsInfo();
+  // console.log("Room participants", participants, typeof(participants));
+  // let people_in_room = JSON.stringify(participants)
+
+  room_name_meeting
+  console.log('room_name_meeting', room_name_meeting)
+
+
+   let get_room_url =  "https://sessions.goebookbuddy.org/room" +"?" + "room=" + room_name_meeting.replaceAll("_"," ")
+   console.log('get_room_url', get_room_url)
+
+    $.ajax({
+      type: 'GET',
+      url: get_room_url,
+      success: function (response) {
+        console.log("Success ROOM")
+        console.log(response)
+      },
+      error: function (response) {
+        console.log("Fail")
+          console.log(response)
+      }
+    });
+
+
+}
+
+function get_all_rooms(){
+
+    $.ajax({
+      type: 'GET',
+      url: "https://sessions.goebookbuddy.org/all-rooms",
+      success: function (response) {
+        console.log("Success")
+        console.log(response)
+      },
+      error: function (response) {
+        console.log("Fail")
+          console.log(response)
+      }
+    });
+
+}
+
+</script>

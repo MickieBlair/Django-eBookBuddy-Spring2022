@@ -1,0 +1,155 @@
+{% extends 'reading_sessions/testing_session_base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="d-none" id="general_audio_div">
+	<audio id='general_audio'>
+		<source id='general_audio_ogg' src="{% static 'sounds/redirect.ogg' %}" type="audio/ogg">
+		<source id='general_audio_mp3' src="{% static 'sounds/redirect.mp3' %}" type="audio/mpeg">			
+	</audio>
+	<button id='play_general_sound' onclick="play_notification_sound()">Play Sound			
+	</button>		
+</div>
+{% if view == "Staff View" %}
+<div class="outer_div_staff" id='outer_div_staff'>
+	<div class="new_sidebar" id='new_sidebar'>
+		{% include 'reading_sessions/staff_snippets/staff_sidebar.html' %} 
+	</div>
+	<div class="staff_left_panel" id="staff_left_panel">
+		<div class="top_monitoring">
+			<div class="staff_room_div">
+				<div class="d-inline-flex align-items-center h-100 w-100">
+					<div class="ps-3 fw-bold flex-grow-1">{{room.name}}</div>
+					<div class="pe-1 d-flex justify-content-center align-items-center">
+						<button type="button" class="btn-close bg-danger button_opacity" id="close_staff_monitoring_btn" onclick="close_monitoring(this)"></button>
+					</div>			
+				</div>
+			</div>
+			<div class="row m-0  p-0 unmatched_row" id="unmatched_row">
+				<div class="col px-0 pt-1 d-flex justify-content-center align-items-center">
+					 <div class="w-100">
+			      	<div>
+			      		<h6 class="p-0 m-0 fw-bold text-center link_text">
+			      			<div>
+			      				Unmatched
+			      			</div>
+			      			<div>
+			      				Students:
+			      			</div>				      		 
+			      		</h6>   	
+			      	</div>
+			      	<div class="pending_student_count fw-normal text-center w-100 link_text" id="pending_student_count">
+			      		{{unmatched_students.count}}     		
+			      	</div>
+			      </div>
+				</div>
+				<div class="col px-1 d-flex justify-content-center align-items-center">
+			    	<div class="btn btn-success btn-sm" type="button"  data-bs-toggle="modal" data-bs-target="#manual_match_Modal">
+			      		Create Match
+					</div>
+					{% include 'reading_sessions/staff_snippets/create_match_modal.html' %}
+			    </div>
+			    <div class="col px-0 pt-1 d-flex justify-content-center align-items-center">      
+			    	<div class="w-100">
+			    		<div>
+				      		<h6 class="p-0 m-0 fw-bold text-center link_text">
+				      			<div>
+				      				Available
+				      			</div>
+				      			<div>
+				      				Readers:
+				      			</div>
+				      		 </h6>
+				      	</div>
+				      	<div class="available_volunteer_count fw-normal text-center link_text" id="available_reader_count">
+				      		{{unmatched_readers.count}}
+				      	</div>
+			    	</div>
+			    </div>
+			</div>
+		</div> 
+		<div class="monitoring_area">
+			<div class="monitoring_type today_sessions_div d-none" id="todays_session_btn_show">
+				{% include 'reading_sessions/staff_snippets/todays_sessions.html' %}
+			</div>
+
+			<div class="monitoring_type rooms_div d-none" id="rooms_participants_btn_show">
+				{% include 'reading_sessions/staff_snippets/participants_and_rooms.html' %} 
+			</div>
+			<div class="monitoring_type staff_chat d-none" id="staff_chat_btn_show">
+				{% include 'reading_sessions/staff_snippets/staff_chat.html' %} 
+			</div>
+		</div>
+	</div>
+	<div class="drag_handle" id='drag_handle'>		
+	</div>
+	<div class="jitsi_meeting_div" id='jitsi_meeting_div'>
+		<div class="staff_meeting_div" id="staff_meeting_div">
+		{% if jitsi_on %}
+			<div id="meeting" class="meeting_div">
+				<div class="w-100 h-100 d-flex justify-content-center align-items-center meeting_spinner" id="meeting_spinner">
+					<div>
+						<div class="d-flex justify-content-center w-100">
+				  			<div class="spinner-border text-light large_spinner" role="status">
+				    			<span class="visually-hidden">Loading...</span>
+				  			</div>
+						</div>
+						<div class="pt-4 w-100">
+							<h5 class="text-light text-center">The Meeting is Loading. </h5>
+						</div>
+						<div class="py-3 w-100">
+							<h5 class="text-light text-center">If the meeting doesn't appear, check your internet speed.</h5>					
+						</div>
+					</div>		
+				</div>		
+			</div>
+		{% else %}
+			<div class="d-grid justify-content-center align-items-center h-100">
+				<h5 class="text-light text-center">The Server is Currently Off.</h5>		
+			</div>
+		{% endif %}
+			<div class="staff_footer_div bg-dark">>
+				{% include 'reading_sessions/staff_snippets/bottom_bar.html' %} 
+			</div>
+		</div>
+	</div>
+</div>
+{% else %}
+
+<div class="non_staff_meeting_div">
+	<div class="ps-3 fw-bold flex-grow-1 bg-light">{{room.name}}</div>
+	{% if jitsi_on %}
+		<div id="meeting" class="other_meeting_div">
+			<div class="w-100 h-100 d-flex justify-content-center align-items-center meeting_spinner" id="meeting_spinner">
+				<div>
+					<div class="d-flex justify-content-center w-100">
+			  			<div class="spinner-border text-light large_spinner" role="status">
+			    			<span class="visually-hidden">Loading...</span>
+			  			</div>
+					</div>
+					<div class="pt-4 w-100">
+						<h5 class="text-light text-center">The Meeting is Loading. </h5>
+					</div>
+					<div class="py-3 w-100">
+						<h5 class="text-light text-center">If the meeting doesn't appear, check your internet speed.</h5>					
+					</div>
+				</div>		
+			</div>		
+		</div>
+	{% else %}
+	<div class="d-grid justify-content-center align-items-center h-100">
+		<h5 class="text-light text-center">The Server is Currently Off.</h5>		
+	</div>
+	{% endif %}
+		
+</div>
+<div class="non_staff_footer_div bg-dark">
+{% include 'reading_sessions/non_staff_snippets/bottom_bar.html' %} 
+</div>
+
+
+{% endif %}
+
+{% endblock %}
